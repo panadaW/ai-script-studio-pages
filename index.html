@@ -1,0 +1,1274 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#172c28">
+  <meta name="description" content="开场，把创作前的每一个判断写清楚。依据短剧创作规范，按十二步完成定位、人物、结构与审稿，保存并导出你的创作档案。">
+  <title>开场 · 短剧创作工作台</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23172c28'/%3E%3Cpath d='M18 18h11M18 18v28h11M46 18H35M46 18v28H35' stroke='%23e5ddbe' fill='none' stroke-width='4'/%3E%3Ccircle cx='32' cy='32' r='5' fill='%23e5ddbe'/%3E%3C/svg%3E">
+  <style>
+@charset "UTF-8";
+
+:root {
+  color-scheme: light;
+  --canvas: #f6f5f0;
+  --paper: #ffffff;
+  --ink: #24372f;
+  --muted: #849087;
+  --green: #47705f;
+  --green-dark: #355746;
+  --green-soft: #edf3ee;
+  --sidebar: #172c28;
+  --line: #e5e7df;
+  --orange: #bd7e4c;
+  --orange-soft: #f9f1e7;
+  --red: #ad554b;
+  --serif: "Songti SC", "STSong", "Noto Serif SC", "SimSun", serif;
+  --sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; min-width: 320px; color: var(--ink); background: var(--canvas); font-family: var(--sans); font-size: 14px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+button, input, textarea, select { font: inherit; }
+button, a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; opacity: .55; }
+button, a { touch-action: manipulation; }
+button:focus-visible, a:focus-visible, summary:focus-visible { outline: 3px solid #a7c7ae; outline-offset: 4px; }
+input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 0; border-color: #77977f; box-shadow: 0 0 0 3px #47705f13; }
+a { color: inherit; text-decoration: none; }
+svg { display: block; flex-shrink: 0; }
+[hidden] { display: none !important; }
+::selection { background: #dbe8d8; color: #1a372c; }
+.icon { width: 18px; height: 18px; flex-shrink: 0; }
+.app-shell { min-height: 100vh; }
+
+.sidebar { position: fixed; z-index: 50; top: 0; left: 0; bottom: 0; width: 240px; display: flex; flex-direction: column; padding: 30px 18px 16px; color: #e4ece5; background: var(--sidebar); overflow-y: auto; scrollbar-width: thin; scrollbar-color: #4e645a transparent; }
+.brand { display: flex; align-items: center; gap: 12px; padding: 2px 14px 27px; }
+.brand-mark { display: grid; place-items: center; width: 38px; height: 40px; color: #bbd4bd; }
+.brand-mark svg { width: 37px; height: 37px; }
+.brand-name { display: block; font-family: var(--serif); font-size: 27px; font-weight: 600; letter-spacing: 5px; line-height: 1.3; }
+.brand-sub { display: block; margin-top: 3px; color: #9eafa3; font-size: 8px; font-weight: 500; letter-spacing: 2px; }
+.workspace-label { padding: 0 14px; margin: 9px 0 8px; color: #7e978b; font-size: 10px; letter-spacing: 1.6px; }
+.project-switch { display: flex; align-items: center; gap: 9px; width: 100%; min-height: 44px; padding: 10px 12px; color: #e8eee8; background: #ffffff08; border: 1px solid #ffffff12; border-radius: 7px; text-align: left; transition: background .2s; }
+.project-switch:hover { background: #ffffff10; }
+.project-switch-label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
+.project-switch > svg:first-child { color: #b9cfb7; width: 15px; height: 15px; }
+.project-switch > svg:last-child { width: 13px; height: 13px; opacity: .6; }
+.sidebar-progress { padding: 21px 13px 22px; }
+.progress-label { display: flex; justify-content: space-between; margin-bottom: 9px; color: #97ad9f; font-size: 10px; letter-spacing: .1px; }
+.progress-label strong { color: #d5e4d5; font-weight: 500; }
+.progress-track { height: 3px; overflow: hidden; background: #ffffff12; border-radius: 5px; }
+.progress-fill { height: 100%; background: #aac8a2; border-radius: 5px; transition: width .4s ease; }
+.workflow { flex: 1; padding-bottom: 22px; }
+.nav-group { margin-bottom: 17px; }
+.nav-group-label { display: flex; align-items: center; gap: 8px; padding: 0 14px; margin: 0 0 9px; color: #7e978b; font-size: 9px; letter-spacing: 1px; }
+.nav-group-label::after { flex: 1; height: 1px; background: #ffffff08; content: ""; }
+.nav-step { display: flex; align-items: center; gap: 11px; width: 100%; min-height: 42px; padding: 9px 13px; margin-bottom: 3px; color: #a7baae; background: transparent; border: 1px solid transparent; border-radius: 6px; text-align: left; transition: .18s ease; }
+.nav-step:hover { color: #e3eee2; background: #ffffff05; }
+.nav-step.active { color: #e8f3df; background: #abcda01a; border-color: #b5cf9a13; }
+.step-number { display: grid; place-items: center; flex-shrink: 0; width: 21px; height: 21px; color: #829c8c; border: 1px solid #75938230; border-radius: 50%; font-size: 9px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.nav-step.active .step-number { color: #182f23; background: #bbd4ac; border-color: #bbd4ac; }
+.nav-step.complete .step-number { color: #b9d3b0; border-color: #9db39355; background: #98bb8b10; }
+.step-number svg { width: 11px; height: 11px; }
+.nav-step-copy { flex: 1; min-width: 0; }
+.nav-step-title { display: block; font-size: 12px; letter-spacing: .3px; }
+.nav-step-sub { display: block; margin-top: 1px; color: #a2b69b; font-size: 9px; }
+.nav-step.locked { color: #728b7e; }
+.nav-step.locked .step-number { border-color: #75938220; color: #627e6f; }
+.nav-step > .icon { width: 12px; height: 12px; opacity: .6; }
+.sidebar-bottom { margin-top: auto; border-top: 1px solid #ffffff0d; }
+.guide-button { display: flex; align-items: center; gap: 10px; width: 100%; padding: 17px 12px; color: #b0c3b6; background: transparent; border: 0; text-align: left; font-size: 11px; }
+.guide-button .icon { width: 15px; height: 15px; color: #8ca58e; }
+.profile { display: flex; align-items: center; gap: 10px; padding: 12px 12px 0; border-top: 1px solid #ffffff0d; }
+.profile-avatar { display: grid; place-items: center; width: 29px; height: 29px; border: 1px solid #adbc9a40; border-radius: 50%; color: #d5dfc3; background: #abc09115; font-family: var(--serif); font-size: 13px; }
+.profile-info { flex: 1; font-size: 10px; color: #b8c7bb; line-height: 1.7; }
+.profile-info small { display: block; color: #718d7b; font-size: 9px; }
+
+.main { margin-left: 240px; }
+.topbar { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 72px; padding: 0 40px; background: #fbfcf8; border-bottom: 1px solid var(--line); }
+.mobile-menu { display: none; }
+.breadcrumb { display: flex; align-items: center; gap: 11px; min-width: 0; color: #89918a; font-size: 11px; }
+.breadcrumb svg { width: 12px; height: 12px; color: #abb1a9; }
+.breadcrumb span:last-child { overflow: hidden; max-width: 220px; color: #415248; text-overflow: ellipsis; white-space: nowrap; }
+.topbar-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.save-state { display: flex; align-items: center; gap: 6px; margin-right: 8px; color: #89958b; font-size: 10px; white-space: nowrap; }
+.status-dot { width: 5px; height: 5px; border-radius: 50%; background: #87a182; }
+.save-state.error { color: var(--red); }
+.save-state.error .status-dot { background: var(--red); }
+.button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 38px; padding: 9px 15px; color: #506055; background: transparent; border: 1px solid transparent; border-radius: 6px; font-size: 11px; font-weight: 500; line-height: 1.5; white-space: nowrap; transition: background .18s, border-color .18s, transform .18s; }
+.button .icon { width: 14px; height: 14px; }
+.button:hover { background: #e9ede5; }
+.button:active { transform: translateY(1px); }
+.button.primary { color: #fff; background: var(--green); border-color: var(--green); box-shadow: 0 2px 3px #284e3820; }
+.button.primary:hover { background: var(--green-dark); border-color: var(--green-dark); }
+.button.secondary { background: #fff; border-color: #dce2d7; }
+.button.secondary:hover { background: #f4f7f1; border-color: #c2cebc; }
+.button.ghost { color: #657565; }
+.button.small { min-height: 31px; padding: 6px 10px; font-size: 10px; }
+.button.icon-only { width: 33px; min-height: 33px; padding: 7px; }
+.workspace { max-width: 1320px; padding: 33px 40px 25px; margin: 0 auto; }
+.intro { padding-bottom: 27px; }
+.eyebrow { color: #81927e; font-size: 9px; font-weight: 600; letter-spacing: 2.5px; }
+.intro-line { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+.intro-copy h1 { margin: 9px 0 10px; color: #263b2e; font-family: var(--serif); font-size: clamp(27px, 2.6vw, 38px); font-weight: 500; line-height: 1.45; letter-spacing: -.7px; }
+.intro-copy p { max-width: 620px; margin: 0; color: #879084; font-size: 11px; line-height: 1.9; }
+.project-stat { display: flex; align-items: center; gap: 13px; padding-top: 8px; flex-shrink: 0; }
+.stat-ring { display: grid; place-items: center; width: 51px; height: 51px; border-radius: 50%; background: radial-gradient(circle closest-side, var(--canvas) 76%, transparent 79%), conic-gradient(var(--green) calc(var(--progress, 0) * 1%), #e2e6dd 0); color: #4c6e50; font-size: 11px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.stat-copy { color: #8e9689; font-size: 9px; }
+.stat-copy strong { display: block; color: #3e5141; font-size: 12px; font-weight: 500; line-height: 1.8; }
+.stage-strip { display: flex; align-items: center; gap: 22px; padding: 18px 22px; margin-bottom: 30px; background: #efefe8; border: 1px solid #e7e8df; border-radius: 7px; }
+.stage-item { display: flex; align-items: center; gap: 11px; flex: 1; color: #939a8e; }
+.stage-icon { display: grid; place-items: center; width: 30px; height: 30px; color: #9ba592; background: #e5e8dd; border-radius: 50%; font-size: 11px; }
+.stage-icon .icon { width: 14px; height: 14px; }
+.stage-name { font-size: 11px; font-weight: 500; }
+.stage-caption { margin-top: 2px; font-size: 9px; opacity: .78; }
+.stage-item.active .stage-icon { color: #e9f2e4; background: #4c715a; }
+.stage-item.active .stage-name { color: #425c42; }
+.stage-item.active .stage-caption { color: #7c8e73; }
+.stage-item.done .stage-icon { color: #5d7b51; background: #dae5d3; }
+.stage-divider { width: 32px; height: 1px; background: #d8ddcf; }
+.editor-layout { display: grid; grid-template-columns: minmax(0, 1fr) 280px; align-items: start; gap: 26px; }
+.editor-column { min-width: 0; }
+.step-heading { margin: 0 0 22px; }
+.step-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; margin-bottom: 7px; color: #85907e; font-size: 9px; letter-spacing: .9px; }
+.step-tag { padding: 2px 7px; color: #74846b; background: #e8edde; border-radius: 3px; font-size: 9px; letter-spacing: .2px; }
+.step-title { margin: 0 0 8px; font-family: var(--serif); font-weight: 500; font-size: 27px; line-height: 1.5; letter-spacing: -.5px; }
+.step-description { margin: 0; color: #8d9488; font-size: 11px; line-height: 1.9; }
+.form-card { padding: 24px; margin-bottom: 18px; background: var(--paper); border: 1px solid #e3e6dc; border-radius: 9px; box-shadow: 0 2px 4px #273a2303; }
+.section-heading { display: flex; align-items: center; gap: 9px; margin: 0 0 7px; color: #3f5441; font-size: 12px; font-weight: 500; }
+.section-number { display: grid; place-items: center; width: 21px; height: 21px; background: #f0f3ec; border-radius: 5px; color: #748c6c; font-size: 9px; font-weight: 500; }
+.section-description { margin: 0 0 22px; color: #969d91; font-size: 10px; line-height: 1.9; }
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 21px 20px; }
+.field { min-width: 0; }
+.field.wide { grid-column: 1 / -1; }
+.field-label { display: flex; align-items: center; gap: 5px; margin-bottom: 8px; color: #4e5b4a; font-size: 11px; font-weight: 500; }
+.required-mark { color: #bf9970; font-size: 11px; }
+.optional-mark { color: #a2aa9a; font-size: 9px; font-weight: 400; }
+.field-hint { margin: 7px 0 0; color: #a0a79a; font-size: 10px; line-height: 1.8; }
+.field-error { margin: 6px 0 0; color: var(--red); font-size: 10px; }
+.text-input, .text-area, .select-input, .search-input { width: 100%; min-height: 41px; padding: 11px 12px; color: #3e503d; background: #fdfefa; border: 1px solid #e1e5d9; border-radius: 5px; font-size: 11px; line-height: 1.8; transition: border-color .2s, box-shadow .2s; }
+.text-input::placeholder, .text-area::placeholder, .search-input::placeholder { color: #adb3a4; font-weight: 400; }
+.text-area { display: block; min-height: 92px; resize: vertical; }
+.select-input { padding-right: 34px; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23949f8c' stroke-width='1.5'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-position: right 13px center; background-repeat: no-repeat; }
+.invalid .text-input, .invalid .text-area, .invalid .select-input { border-color: #dba69d; background-color: #fffdfb; }
+.chips-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+.choice-chip { display: flex; align-items: center; gap: 9px; min-height: 44px; padding: 11px 13px; color: #78816e; border: 1px solid #e6e9df; border-radius: 6px; background: #fdfefa; text-align: left; transition: .18s; }
+.choice-chip:hover { border-color: #b8c9ab; background: #fafcf6; }
+.choice-chip.selected { color: #4e6b45; border-color: #8fa982; background: #f0f5e9; }
+.choice-check { display: grid; place-items: center; flex-shrink: 0; width: 15px; height: 15px; color: transparent; background: white; border: 1px solid #d5ddcc; border-radius: 4px; }
+.choice-check .icon { width: 11px; height: 11px; }
+.choice-chip.selected .choice-check { color: white; background: #729264; border-color: #729264; }
+.choice-label { color: inherit; font-size: 11px; }
+.choice-caption { display: block; margin-top: 2px; color: #99a18f; font-size: 9px; line-height: 1.6; }
+.repeater { min-width: 0; }
+.repeater-scroll { overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; scrollbar-color: #c7d3be #f2f5ee; }
+.repeater-table { width: 100%; border-collapse: separate; border-spacing: 0; table-layout: auto; font-size: 10px; }
+.repeater-table th { padding: 10px 8px; background: #f1f4ec; color: #7f8a72; text-align: left; font-size: 10px; font-weight: 500; white-space: nowrap; }
+.repeater-table th:first-child { border-radius: 5px 0 0 5px; }
+.repeater-table th:last-child { border-radius: 0 5px 5px 0; }
+.repeater-table td { min-width: 128px; padding: 8px 5px; vertical-align: top; border-bottom: 1px solid #edf0e7; }
+.repeater-table td:first-child { padding-left: 0; }
+.repeater-table td:last-child { min-width: 28px; padding-right: 0; }
+.repeater-table .text-input, .repeater-table .text-area, .repeater-table .select-input { min-width: 120px; min-height: 37px; padding: 8px 9px; font-size: 10px; }
+.repeater-table .text-area { min-height: 73px; }
+.remove-row { display: grid; place-items: center; width: 27px; height: 33px; padding: 4px; color: #a5ad9a; background: transparent; border: 0; border-radius: 4px; }
+.remove-row:hover { color: #b3715f; background: #fbf0e9; }
+.remove-row .icon { width: 13px; height: 13px; }
+.add-row { display: inline-flex; align-items: center; gap: 6px; margin-top: 9px; padding: 6px 1px; color: #6d895f; background: transparent; border: 0; font-size: 10px; }
+.add-row .icon { width: 13px; height: 13px; }
+.form-section-title { grid-column: 1 / -1; padding: 15px 0 2px; margin: 0; color: #708166; border-top: 1px solid #edf0e7; font-size: 11px; font-weight: 500; }
+.step-review { padding: 21px 24px; margin-top: 20px; background: #eeefe6; border: 1px solid #e2e6d8; border-radius: 8px; }
+.review-heading { display: flex; align-items: center; gap: 8px; margin: 0 0 4px; color: #506047; font-size: 12px; font-weight: 500; }
+.review-heading .icon { width: 15px; height: 15px; color: #8c9d77; }
+.review-description { margin: 0 0 14px; color: #929b84; font-size: 10px; line-height: 1.8; }
+.check-row { display: flex; align-items: flex-start; gap: 9px; padding: 8px 0; cursor: pointer; color: #77816a; font-size: 10px; line-height: 1.8; }
+.check-row input[type="checkbox"] { flex-shrink: 0; width: 14px; height: 14px; margin: 2px 0 0; accent-color: #6d8a5f; cursor: pointer; }
+.check-box { display: grid; place-items: center; flex-shrink: 0; width: 14px; height: 14px; margin-top: 2px; border: 1px solid #c6cfba; border-radius: 3px; background: #fafcf6; }
+.check-row.checked { color: #557044; }
+.check-copy { flex: 1; }
+.step-footer { position: sticky; z-index: 5; bottom: 0; display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 20px 0 14px; margin-top: 8px; background: linear-gradient(to bottom, #f6f5f000, var(--canvas) 15%); }
+.footer-caption { color: #959c8c; font-size: 10px; }
+.footer-actions { display: flex; align-items: center; gap: 9px; }
+.footer-actions .button.primary { min-width: 148px; }
+
+.context-column { display: flex; flex-direction: column; gap: 16px; padding-top: 4px; }
+.context-card { padding: 21px 20px; background: #fffefa; border: 1px solid #e3e6dc; border-radius: 8px; }
+.card-eyebrow { display: flex; align-items: center; gap: 7px; margin: 0 0 13px; color: #85917a; font-size: 9px; letter-spacing: 1.3px; }
+.card-eyebrow .icon { width: 13px; height: 13px; }
+.card-title { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 16px; color: #53644a; font-size: 12px; font-weight: 500; }
+.completion-count { color: #8b9980; font-size: 10px; font-weight: 400; }
+.completion-list { display: flex; flex-direction: column; gap: 13px; }
+.completion-item { display: flex; align-items: center; gap: 9px; color: #929a89; font-size: 10px; line-height: 1.7; }
+.completion-dot { display: grid; place-items: center; width: 13px; height: 13px; color: transparent; background: #f5f7f0; border: 1px solid #dce2d3; border-radius: 50%; }
+.completion-dot .icon { width: 9px; height: 9px; }
+.completion-item.done { color: #66825a; }
+.completion-item.done .completion-dot { color: #6a8d59; border-color: #c8d5be; background: #e9f1e2; }
+.note-card { padding: 21px 20px; background: #edf0e5; border: 1px solid #e0e5d5; border-radius: 8px; }
+.quote-icon { display: inline-block; height: 26px; margin-bottom: 8px; color: #9ba985; font-family: Georgia, serif; font-size: 42px; line-height: 1.2; }
+.quote-icon svg { width: 20px; height: 20px; }
+.tip-title { margin: 0 0 8px; color: #5b6d4e; font-family: var(--serif); font-size: 16px; font-weight: 500; line-height: 1.7; }
+.tip-text { margin: 0; color: #8a957d; font-size: 10px; line-height: 2; }
+.tip-text + .tip-title { margin-top: 20px; padding-top: 16px; border-top: 1px solid #dce3d0; }
+.source-card { display: block; width: 100%; padding: 19px 20px; background: #fffefa; border: 1px solid #e3e6dc; border-radius: 8px; text-align: left; transition: .2s; }
+.source-card:hover { border-color: #b9c7aa; background: #fcfdf8; }
+.source-meta { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; color: #aaa58e; font-size: 9px; letter-spacing: .9px; }
+.source-meta .icon { width: 13px; height: 13px; }
+.source-title { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 7px; color: #69755b; font-size: 11px; font-weight: 500; }
+.source-title .icon { width: 12px; height: 12px; color: #9ba68c; }
+.source-description { margin: 0; color: #a0a58f; font-size: 9px; line-height: 1.8; }
+.source-link { color: #779361; font-size: 10px; }
+.mini-summary { padding-top: 15px; margin-top: 15px; border-top: 1px solid #edf0e7; }
+.summary-label { margin-bottom: 4px; color: #a0a791; font-size: 9px; }
+.summary-value { color: #6e7f61; font-size: 10px; line-height: 1.8; overflow-wrap: anywhere; }
+.workspace-footer { display: flex; align-items: center; justify-content: center; gap: 8px; padding-top: 27px; margin-top: 20px; border-top: 1px solid #e6e8de; color: #a5aa9a; font-size: 9px; }
+.footer-dot { width: 3px; height: 3px; border-radius: 50%; background: #bdc5b1; }
+.step-status { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; border: 1px solid #dde5d3; border-radius: 4px; color: #80946c; background: #f1f6eb; font-size: 9px; }
+.banner { display: flex; align-items: flex-start; gap: 10px; padding: 13px 16px; margin-bottom: 19px; border: 1px solid #ecdac5; border-radius: 7px; color: #9c8058; background: #fcf5eb; font-size: 11px; line-height: 1.9; }
+.banner .icon { width: 15px; height: 15px; margin-top: 3px; color: #b79a6f; }
+
+.toast { position: fixed; z-index: 200; left: calc(50% + 120px); bottom: 28px; transform: translate(-50%, 15px); max-width: min(520px, calc(100vw - 40px)); padding: 13px 21px; color: #f2f6ec; background: #263e2f; border: 1px solid #6d85643d; border-radius: 8px; box-shadow: 0 10px 40px #192e202e; font-size: 12px; line-height: 1.7; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.modal { width: min(620px, calc(100vw - 40px)); max-height: calc(100dvh - 80px); padding: 0; color: var(--ink); background: #fbfcf8; border: 1px solid #e3e7db; border-radius: 12px; box-shadow: 0 30px 120px #14261b3d; overflow: hidden; }
+.modal[open] { display: flex; flex-direction: column; animation: dialog-in .2s ease both; }
+.modal.wide { width: min(900px, calc(100vw - 40px)); }
+.modal::backdrop { background: #172c2873; backdrop-filter: blur(4px); }
+.modal-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-shrink: 0; padding: 25px 28px 20px; border-bottom: 1px solid var(--line); }
+.modal-title { margin: 0; color: #354b38; font-family: var(--serif); font-size: 23px; font-weight: 500; }
+.modal-subtitle { margin: 6px 0 0; color: #969f8c; font-size: 11px; line-height: 1.8; }
+.dialog-close { display: grid; place-items: center; width: 28px; height: 28px; padding: 6px; color: #8f9c85; background: #eff2e9; border: 0; border-radius: 5px; }
+.dialog-close:hover { background: #e3e9db; color: #5b7550; }
+.dialog-close .icon { width: 15px; height: 15px; }
+.modal-body { flex: 1; min-height: 0; padding: 24px 28px; overflow-y: auto; overscroll-behavior: contain; }
+.modal-footer { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-shrink: 0; padding: 17px 28px; border-top: 1px solid var(--line); }
+.project-list { display: flex; flex-direction: column; gap: 10px; }
+.project-item { display: flex; align-items: center; gap: 12px; padding: 16px; background: white; border: 1px solid #e0e7d8; border-radius: 7px; }
+.project-item.active { background: #f2f7ec; border-color: #b7caaa; }
+.project-item-main { flex: 1; min-width: 0; }
+.project-item-actions { display: flex; align-items: center; gap: 5px; }
+.project-name { display: block; overflow: hidden; color: #526849; font-size: 12px; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
+.project-meta { margin-top: 4px; color: #98a18c; font-size: 10px; }
+.empty-state { padding: 35px 20px; text-align: center; color: #9ba78e; font-size: 12px; line-height: 2; }
+.report-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 25px; }
+.report-stat { padding: 14px 17px; border: 1px solid #e0e8d8; border-radius: 6px; background: #f2f6ec; color: #88977a; font-size: 10px; }
+.report-stat strong { display: block; margin-bottom: 3px; color: #4c6b42; font-family: var(--serif); font-size: 23px; font-weight: 500; }
+.report-section { padding: 0 0 23px; margin-bottom: 24px; border-bottom: 1px solid #e1e7d9; }
+.report-section h2 { margin: 0 0 16px; color: #3f5a39; font-family: var(--serif); font-size: 20px; font-weight: 500; }
+.report-section h3 { margin: 17px 0 9px; color: #667e58; font-size: 12px; font-weight: 500; }
+.report-field { padding: 8px 0; }
+.report-field > strong { display: block; margin-bottom: 3px; color: #8b9980; font-size: 10px; font-weight: 500; }
+.report-value { color: #4f6247; font-size: 12px; line-height: 1.9; white-space: pre-wrap; overflow-wrap: anywhere; }
+.report-value table { width: 100%; margin-top: 7px; border-collapse: collapse; font-size: 10px; white-space: normal; }
+.report-value th, .report-value td { padding: 8px; border: 1px solid #e1e7d9; vertical-align: top; text-align: left; }
+.report-value th { color: #7a8b6b; background: #f2f5eb; font-weight: 500; }
+.source-content { color: #66775a; font-size: 12px; line-height: 2; white-space: pre-wrap; overflow-wrap: anywhere; }
+.source-content h1, .source-content h2, .source-content h3 { color: #4b6542; line-height: 1.6; }
+.source-content h1 { font-family: var(--serif); font-size: 24px; font-weight: 500; }
+.source-content h2 { padding-bottom: 8px; margin-top: 27px; border-bottom: 1px solid #e3e9da; font-size: 17px; }
+.source-content h3 { font-size: 14px; }
+.source-content p, .source-content ul { margin: 10px 0; }
+.source-content table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: 11px; }
+.source-content th, .source-content td { padding: 8px 10px; border: 1px solid #e2e8d9; text-align: left; }
+.source-content th { background: #eef3e6; font-weight: 500; }
+.source-content pre { padding: 15px; overflow-x: auto; border-radius: 5px; background: #edf2e6; font-size: 11px; white-space: pre; }
+.source-content blockquote { margin: 12px 0; padding: 8px 14px; border-left: 3px solid #b9caaa; background: #f0f4e8; color: #7c8e6c; }
+.search-input { margin-bottom: 18px; }
+.completion-screen { padding: 45px 30px; text-align: center; background: #fffefa; border: 1px solid #dce6d3; border-radius: 10px; }
+.completion-mark { display: grid; place-items: center; width: 65px; height: 65px; margin: 0 auto 22px; color: #6f965b; border: 1px solid #c8daba; border-radius: 50%; background: #eff7e7; }
+.completion-mark .icon { width: 28px; height: 28px; }
+.completion-screen h2 { font-family: var(--serif); font-size: 30px; font-weight: 500; }
+.completion-screen p { max-width: 400px; margin: 10px auto; color: #8e9a80; font-size: 12px; line-height: 2; }
+.completion-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 25px; }
+.mobile-backdrop { display: none; }
+
+@keyframes dialog-in { from { opacity: 0; transform: translateY(8px) scale(.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes page-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.step-heading, .form-card { animation: page-in .3s ease both; }
+
+@media (min-width: 1600px) {
+  .workspace { padding-top: 42px; }
+  .intro { padding-bottom: 32px; }
+  .stage-strip { margin-bottom: 34px; }
+  .editor-layout { gap: 32px; }
+  .form-card { padding: 27px; }
+}
+@media (max-width: 1240px) {
+  .topbar { padding-right: 28px; padding-left: 28px; }
+  .workspace { padding-right: 28px; padding-left: 28px; }
+  .editor-layout { grid-template-columns: minmax(0, 1fr) 235px; gap: 21px; }
+  .context-card, .note-card, .source-card { padding: 18px 17px; }
+  .stage-strip { gap: 16px; padding-right: 17px; padding-left: 17px; }
+  .stage-divider { width: 20px; }
+  .intro-copy h1 { font-size: 31px; }
+  .stat-copy { display: none; }
+}
+@media (max-width: 1100px) {
+  .sidebar { width: 220px; padding-right: 14px; padding-left: 14px; }
+  .main { margin-left: 220px; }
+  .editor-layout { grid-template-columns: minmax(0, 1fr); }
+  .context-column { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+  .context-column .source-card { grid-column: 1 / -1; }
+  .stage-strip { gap: 11px; }
+  .stage-item { gap: 8px; }
+  .stage-caption { font-size: 8px; }
+  .save-state { font-size: 9px; margin-right: 2px; }
+  .toast { left: calc(50% + 110px); }
+}
+@media (max-width: 900px) {
+  .sidebar { width: 240px; transform: translateX(-100%); transition: transform .25s ease; }
+  .sidebar.open, body.sidebar-open .sidebar { transform: translateX(0); }
+  .main { margin-left: 0; }
+  .mobile-menu { display: inline-flex; width: 32px; height: 32px; align-items: center; justify-content: center; padding: 5px; background: transparent; border: 1px solid #e0e5d9; border-radius: 5px; color: #6b8160; }
+  .topbar { height: 62px; justify-content: flex-start; gap: 13px; padding-right: 25px; padding-left: 25px; }
+  .topbar-actions { margin-left: auto; }
+  .workspace { padding: 27px 25px 22px; }
+  .intro-copy h1 { font-size: 34px; }
+  .stat-copy { display: block; }
+  .editor-layout { grid-template-columns: minmax(0, 1fr) 235px; }
+  .context-column { display: flex; }
+  .mobile-backdrop { position: fixed; z-index: 45; inset: 0; background: #10271f66; backdrop-filter: blur(2px); }
+  .mobile-backdrop.show, body.sidebar-open .mobile-backdrop { display: block; }
+  .toast { left: 50%; }
+}
+@media (max-width: 720px) {
+  .editor-layout { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .context-column { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .breadcrumb { gap: 6px; }
+  .breadcrumb span:first-child, .breadcrumb > svg:first-child { display: none; }
+  .breadcrumb span:last-child { max-width: 120px; }
+  .topbar-actions { gap: 5px; }
+  .save-state { display: none; }
+  .topbar-actions .button { padding-right: 10px; padding-left: 10px; }
+  .intro-copy h1 { font-size: 31px; }
+  .stat-copy { display: none; }
+  .stage-strip { margin-bottom: 24px; padding: 15px 14px; }
+  .stage-item { gap: 7px; }
+  .stage-name { font-size: 10px; }
+  .stage-caption { font-size: 8px; }
+  .stage-icon { width: 26px; height: 26px; }
+  .stage-divider { width: 12px; }
+  .form-card { padding: 21px; }
+  .step-review { padding: 19px 21px; }
+  .workspace-footer { flex-wrap: wrap; }
+  .modal { max-height: calc(100dvh - 40px); }
+}
+@media (max-width: 480px) {
+  .topbar { gap: 9px; padding-right: 16px; padding-left: 16px; }
+  .topbar-actions .button { min-height: 32px; padding: 7px 8px; gap: 4px; font-size: 10px; }
+  .topbar-actions .button .icon { width: 12px; height: 12px; }
+  .breadcrumb { font-size: 10px; }
+  .breadcrumb span:last-child { max-width: 83px; }
+  .workspace { padding: 24px 17px 20px; }
+  .intro { padding-bottom: 21px; }
+  .intro-line { gap: 12px; }
+  .eyebrow { font-size: 8px; letter-spacing: 1.7px; }
+  .intro-copy h1 { font-size: 27px; letter-spacing: -1px; }
+  .intro-copy p { font-size: 10px; line-height: 1.9; }
+  .project-stat { padding-top: 0; }
+  .stat-ring { width: 43px; height: 43px; font-size: 10px; }
+  .stage-strip { gap: 8px; padding: 13px 10px; }
+  .stage-item { gap: 6px; }
+  .stage-icon { width: 22px; height: 22px; font-size: 9px; }
+  .stage-icon .icon { width: 12px; height: 12px; }
+  .stage-name { font-size: 9px; }
+  .stage-caption { display: none; }
+  .stage-divider { width: 8px; }
+  .step-title { font-size: 24px; }
+  .step-description { font-size: 10px; }
+  .form-card { padding: 19px 17px; }
+  .form-grid { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .field.wide { grid-column: auto; }
+  .field-label { font-size: 11px; }
+  .text-input, .text-area, .select-input, .search-input { font-size: 12px; padding: 11px; }
+  .text-area { min-height: 100px; }
+  .chips-grid { gap: 8px; }
+  .choice-chip { min-height: 43px; padding: 9px 10px; gap: 7px; }
+  .choice-label { font-size: 10px; }
+  .choice-caption { font-size: 8px; }
+  .step-review { padding: 18px 17px; }
+  .check-row { font-size: 10px; line-height: 1.9; }
+  .step-footer { align-items: flex-start; padding-top: 17px; }
+  .footer-caption { max-width: 75px; font-size: 9px; padding-top: 10px; }
+  .footer-actions { gap: 3px; }
+  .footer-actions .button { padding-right: 10px; padding-left: 10px; }
+  .footer-actions .button.primary { min-width: 122px; }
+  .context-column { grid-template-columns: minmax(0, 1fr); }
+  .context-column .source-card { grid-column: auto; }
+  .context-card, .note-card, .source-card { padding: 20px; }
+  .completion-list { gap: 10px; }
+  .modal, .modal.wide { width: calc(100vw - 24px); max-height: calc(100dvh - 24px); border-radius: 9px; }
+  .modal-header { padding: 21px 19px 17px; }
+  .modal-body { padding: 21px 19px; }
+  .modal-footer { flex-wrap: wrap; padding: 15px 19px; }
+  .modal-title { font-size: 22px; }
+  .report-stats { gap: 7px; }
+  .report-stat { padding: 10px; font-size: 9px; }
+  .report-stat strong { font-size: 20px; }
+  .project-item { padding: 13px 10px; gap: 7px; }
+  .project-item-actions { gap: 1px; }
+  .project-item-actions .button { padding: 5px 7px; }
+  .completion-screen { padding: 35px 20px; }
+  .completion-screen h2 { font-size: 26px; }
+}
+
+@media print {
+  @page { size: A4; margin: 18mm; }
+  body { background: white; font-size: 11px; }
+  .sidebar, .topbar, .stage-strip, .context-column, .step-footer, .workspace-footer, .toast, .mobile-backdrop, .modal-header, .modal-footer, .completion-actions, .button, .remove-row, .add-row { display: none !important; }
+  .main { margin: 0; }
+  .workspace { max-width: none; padding: 0; }
+  .editor-layout { display: block; }
+  .intro { margin-bottom: 20px; }
+  .project-stat { display: none; }
+  .form-card, .step-review { box-shadow: none; border-color: #ddd; break-inside: avoid; }
+  .modal[open], .modal.wide { position: static; display: block; width: auto; max-width: none; height: auto; max-height: none; margin: 0; padding: 0; overflow: visible; border: 0; box-shadow: none; }
+  .modal::backdrop { background: transparent; }
+  body:has(.modal[open]) .app-shell { display: none; }
+  .modal-body { padding: 0; overflow: visible; }
+  .report-section { break-inside: auto; }
+  .report-field, .report-value tr { break-inside: avoid; }
+  .source-content, .report-value { color: #333; }
+  .text-input, .text-area, .select-input { background: white; border-color: #ccc; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* Workspace composition and application-specific controls. */
+.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+.dialog-open { overflow:hidden; }
+.brand-dot { color:#c5b78c; letter-spacing:0; }
+.project-switch-label { display:flex; align-items:center; gap:9px; }
+.project-switch-label > span:last-child { overflow:hidden; text-overflow:ellipsis; }
+.project-symbol { color:#b3c1a6; font-size:18px; }
+.nav-current-dot { width:5px; height:5px; background:#b4c99f; border-radius:50%; }
+.external-icon { margin-left:auto; color:#829b8a; }
+.profile-info strong { font-weight:400; }
+.project-crumb { max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding:3px 0; color:#405347; background:none; border:0; font-size:11px; }
+.project-crumb:hover { color:var(--green); }
+.breadcrumb-divider { color:#c3c8bc; }
+.eyebrow { display:flex; align-items:center; gap:9px; }
+.eyebrow-line { width:15px; height:1px; background:#7c9276; }
+.edition { font-weight:400; letter-spacing:1px; color:#a1a694; }
+.stat-ring > span > span { margin-left:1px; font-size:8px; }
+.stat-copy > span { display:block; }
+.stage-copy { display:flex; flex-direction:column; min-width:0; }
+.stage-progress { margin-left:auto; color:#9aa28f; font-size:10px; font-variant-numeric:tabular-nums; }
+.stage-item.active .stage-progress { color:#64805b; }
+.banner { align-items:center; }
+.banner > span { flex:1; }
+.banner strong { font-weight:500; margin-right:6px; }
+.banner > button { flex-shrink:0; }
+.banner .button { color:#97754c; }
+.step-meta > span:last-child { display:flex; align-items:center; gap:5px; }
+.step-time-dot { width:3px; height:3px; border-radius:50%; background:#aab19b; }
+.step-title:focus { outline:none; }
+.section-heading { align-items:flex-start; margin-bottom:23px; }
+.section-heading h3 { margin:0 0 4px; font-size:13px; font-weight:500; }
+.section-number { width:27px; height:27px; margin-top:2px; }
+.section-description { display:block; margin:0; font-weight:400; font-size:11px; }
+.required-legend { margin-left:auto; white-space:nowrap; color:#a3aa99; font-size:10px; font-weight:400; }
+.field-hint { margin:-2px 0 9px; font-size:11px; }
+.field-label { font-size:12px; }
+.text-input,.text-area,.select-input { font-size:12px; }
+.field-error { display:block; min-height:0; }
+.field-error:empty { display:none; }
+.choice-label { font-size:12px; }
+.invalid .chips-grid { outline:1px solid #dba69d; outline-offset:3px; border-radius:5px; }
+.repeater-table td.row-index,.repeater-table th.row-index { min-width:27px; width:27px; padding-top:17px; color:#9aa58f; font-size:10px; }
+.repeater-table th.row-index { padding-top:10px; }
+.repeater-table td.row-control,.repeater-table th.row-control { min-width:28px; width:28px; }
+.review-heading h3 { margin:0; font-size:12px; font-weight:500; }
+.review-heading > span { margin-left:auto; font-size:9px; font-weight:400; color:#9ba58e; }
+.review-description { margin-top:7px; font-size:11px; }
+.check-row { font-size:12px; }
+.footer-caption { display:flex; align-items:center; gap:7px; font-size:11px; }
+.step-status { width:6px; height:6px; padding:0; border:0; border-radius:50%; background:#b2baaa; }
+.step-status.ready { background:#6e9472; }
+#stepContext { display:flex; flex-direction:column; gap:16px; }
+.context-column { position:sticky; top:24px; }
+.completion-item,.tip-text { font-size:11px; }
+.completion-item small { margin-left:5px; color:#a4ac99; font-size:10px; }
+.secondary-note { background:#f1eee4; border-color:#e7e1d4; }
+.secondary-note .tip-title { color:#8a795e; }
+.secondary-note .tip-text { color:#9e927e; }
+.source-description,.source-link,.summary-label,.summary-value { display:block; }
+.source-link { display:flex; align-items:center; justify-content:space-between; margin-top:13px; padding-top:11px; border-top:1px solid #e9ebdf; }
+.source-link .icon { width:14px; height:14px; }
+.mini-summary { margin:0; padding:4px 8px; border:0; }
+.summary-value { color:#9aa18f; font-size:10px; }
+.workspace-footer { justify-content:space-between; flex-wrap:wrap; line-height:1.8; }
+.workspace-footer > span { display:flex; align-items:center; gap:7px; }
+.footer-dot { display:inline-block; flex-shrink:0; }
+.project-item-main { padding:0; background:none; border:0; text-align:left; }
+.project-meta { display:block; }
+.project-name small,.project-active-label { font-size:9px; margin-left:6px; color:#8b9d79; font-weight:400; }
+.export-options { display:flex; flex-direction:column; gap:12px; }
+.export-option { display:flex; align-items:center; gap:14px; width:100%; padding:19px; text-align:left; background:#fff; border:1px solid #e1e7d9; border-radius:8px; color:#6c855e; }
+.export-option:hover { border-color:#b6c6aa; background:#f5f8ef; }
+.export-option > span { flex:1; }
+.export-option strong { display:block; font-size:13px; font-weight:500; color:#4f6547; }
+.export-option small { display:block; margin-top:5px; font-size:11px; color:#98a18d; }
+.report-section > h3 { display:flex; align-items:center; gap:10px; margin:0 0 15px; padding-top:12px; color:#526b47; font-family:var(--serif); font-size:19px; }
+.report-section > h3 > span { font-family:var(--sans); font-size:11px; color:#a4af9b; }
+.report-section > h3 > small { margin-left:auto; font-family:var(--sans); font-size:10px; font-weight:400; color:#9aa58e; }
+.report-field > strong { font-size:11px; }
+.report-value { white-space:normal; }
+.report-value td { white-space:pre-wrap; }
+.report-stat strong small { font-size:12px; margin-left:3px; color:#93a084; }
+.empty-value { color:#b1b8aa; }
+.report-demo-note { font-size:11px; color:#a28c69; background:#fbf3e6; padding:12px; border-radius:5px; }
+.report-project-title { display:none; }
+.source-content { white-space:normal; }
+.source-section { margin-bottom:9px; border:1px solid #e1e7d9; border-radius:6px; overflow:hidden; }
+.source-section summary { padding:13px 15px; cursor:pointer; background:#f2f5eb; color:#5b7351; font-size:12px; }
+.source-section[open] summary { border-bottom:1px solid #e1e7d9; }
+.source-markdown { padding:10px 17px 16px; }
+.source-markdown h4 { margin:20px 0 8px; color:#4c6544; font-size:13px; font-weight:500; }
+.source-markdown hr { border:0; border-top:1px solid #e2e8d9; margin:20px 0; }
+.source-footnote { font-size:10px; color:#99a18e; line-height:1.8; }
+.dialog-feedback { padding:10px 12px; margin-bottom:16px; font-size:12px; color:#5c7b50; background:#edf4e7; border-radius:5px; }
+@media(max-width:1100px) { .context-column { position:static; } #stepContext { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; } .source-card,.mini-summary { grid-column:1 / -1; } }
+@media(min-width:721px) and (max-width:900px) { #stepContext { display:flex; } }
+@media(max-width:720px) { .project-crumb { max-width:150px; } .stage-progress { display:none; } .banner { flex-wrap:wrap; } .banner > span { flex-basis:75%; } .banner > #dismissBanner { position:absolute; right:32px; } .banner { padding-right:38px; } .banner .button { padding:0; min-height:24px; } .edition { display:none; } .intro-copy h1 { font-size:28px; } }
+@media(max-width:480px) { .breadcrumb > span { display:none; } .project-crumb { max-width:91px; font-size:10px; } .topbar-actions .button { padding:7px 8px; } .eyebrow { font-size:8px; } .intro-copy h1 { font-size:25px; } .intro-copy p { font-size:11px; } .project-stat { align-self:flex-start; margin-top:15px; } .step-title { font-size:23px; } .step-description { font-size:12px; } .stage-name { font-size:10px; } .form-card { padding:20px 17px; } .text-input,.text-area,.select-input { font-size:16px; } .field-hint { font-size:11px; } .section-description { font-size:10px; } .check-row { font-size:12px; } #stepContext { display:flex; } .report-stats { grid-template-columns:repeat(3,minmax(0,1fr)); } .report-stat strong { font-size:18px; } .export-option { padding:14px; gap:10px; } .footer-caption { max-width:112px; font-size:10px; } .required-legend { font-size:9px; } .banner > span { flex-basis:100%; } .banner > #dismissBanner { right:27px; } }
+@media print { .report-project-title { display:block; font-family:var(--serif); font-size:24px; margin-bottom:20px; } .report-stats { margin-top:16px; } .report-demo-note { background:white; } }
+@media(max-width:480px) { .project-stat { display:none; } }
+
+</style>
+  <script>
+/* 创作流程依据《爆款短剧剧本创作规范手册》附录 A。示例仅供理解字段，不代表人工审稿通过。 */
+window.STEPS = [
+  {
+    id: 'audience', short: '受众与平台', phase: '立项判断', title: '故事的第一位观众，是谁？',
+    description: '先找到一个具体的人，再决定这部剧带来怎样的情绪回报。', chapters: '第 1—2 章', time: '约 8 分钟',
+    fields: [
+      {id:'audience',label:'核心观众',type:'text',required:true,placeholder:'例如：重返职场、渴望重新证明自己的都市女性',hint:'写生活处境与需求，比年龄、性别标签更重要。'},
+      {id:'platform',label:'首发平台',type:'select',required:true,options:['抖音','快手','小红书','视频号','B 站','TikTok / Reels / YouTube','短剧 App','其他 / 待定']},
+      {id:'pain',label:'观众正在经历什么？',type:'textarea',required:true,placeholder:'写一个可以落到生活细节里的痛点，而不是抽象焦虑。'},
+      {id:'desire',label:'观众希望从故事中得到什么？',type:'textarea',required:true,placeholder:'被看见、找回尊严、理解关系、获得勇气……'},
+      {id:'mechanisms',label:'主打的观众心理机制',type:'chips',required:true,maxSelected:3,options:['代偿满足','代入认同','优越感 / 俯视','情感宣泄','认知好奇','社交货币','审美愉悦','安全感 / 陪伴'],hint:'选择最小有效组合，建议 1—3 项。'},
+      {id:'promise',label:'用一句话向观众作出承诺',type:'textarea',required:true,wide:true,placeholder:'看完这个故事，观众将获得怎样具体的情绪体验？'},
+      {id:'research',label:'受众与平台的待验证假设',type:'textarea',required:false,wide:true,placeholder:'记录样本、来源、日期和待验证事项；没有资料时，明确写“待验证”。'}
+    ],
+    checks:[{id:'specific',text:'我能够描述核心观众的具体处境，而不只是一组人口标签。'},{id:'promise',text:'选定的心理机制与故事结局、情绪承诺相互一致。'},{id:'assumption',text:'我已区分已知事实与受众、平台偏好的待验证假设。'}],
+    tips:[{title:'先写处境，再写画像',text:'“刚结束育儿假，发现原来的工位已经换了人”，比“25—35 岁女性”更能帮助编剧设计冲突。'},{title:'参考表不是市场结论',text:'原规范中的画像和平台偏好用于提出假设；涉及当前市场、政策与审核要求时，需要另行核验并记录来源。'}]
+  },
+  {
+    id:'concept',short:'选题与类型',phase:'立项判断',title:'同样的题材，你准备讲出什么不同？',
+    description:'拆开七维基因，确定主类型承诺，让差异真正改变人物的选择。',chapters:'第 3、5 章',time:'约 12 分钟',
+    fields:[
+      {id:'medium',label:'呈现形态',type:'select',required:true,options:['真人','AI 真人','动画 / 漫剧','口播解说','微电影 / 剧情短片']},
+      {id:'genre',label:'主类型',type:'select',required:true,options:['爱情 / 甜宠 / 虐恋','喜剧 / 黑色喜剧','家庭 / 伦理','职场 / 商战','校园 / 青春 / 成长','悬疑 / 推理','犯罪 / 惊悚','恐怖 / 怪谈','动作 / 冒险 / 灾难','科幻 / 高概念','奇幻 / 玄幻 / 仙侠','历史 / 古装 / 权谋','治愈 / 文艺 / 生活流','儿童 / 合家欢 / 寓言']},
+      {id:'setting',label:'世界与时代背景',type:'text',required:true,placeholder:'例如：当代沿海城市，一座即将重新开幕的老剧场'},
+      {id:'emotionalTone',label:'情绪调性',type:'text',required:true,placeholder:'例如：克制、明快，保留职业细节与生活温度'},
+      {id:'storyEngine',label:'持续推进的戏剧引擎',type:'textarea',required:true,placeholder:'追查、竞赛、复仇、关系靠近、任务单元……它如何不断制造新行动？'},
+      {id:'sevenGenes',label:'七维基因组合',type:'textarea',required:true,wide:true,placeholder:'世界设定 / 呈现形态 / 核心冲突 / 人物设定 / 叙事结构 / 情绪基调 / 反转机制'},
+      {id:'differences',label:'至少两项实质差异',type:'textarea',required:true,wide:true,placeholder:'保留什么？改变哪两个维度？它们怎样影响策略、因果或结局代价？',hint:'对应原规范第 3 章；具体差异应有剧情后果。'},
+      {id:'secondaryGenre',label:'辅助类型与职责',type:'textarea',required:true,placeholder:'没有辅助类型可写“无”；如有，说明它只增加哪种压力、信息机制或乐趣。'},
+      {id:'typePromise',label:'主类型在高潮必须兑现什么？',type:'textarea',required:true,placeholder:'例如：主角用已铺垫的职业能力赢回决定权，并承担公开真相的代价。'}
+    ],
+    checks:[{id:'difference',text:'差异改变了人物行动或故事因果，而不只是更换服装和场景。'},{id:'primary',text:'主类型、辅助类型及高潮回报的职责已经清楚。'},{id:'feasible',text:'第一集卖点可以一句话说清，且现有制作条件能够实现。'}],
+    tips:[{title:'一个主类型，一种核心承诺',text:'混搭要共同逼迫同一个人物作出选择。辅助类型服务主冲突，避免多个题材各讲一套。'},{title:'让设定进入行动',text:'“舞美设计师重返职场”是背景；“她必须在开幕前修好自己五年前留下的设计错误”才开始形成戏剧引擎。'}]
+  },
+  {
+    id:'premise',short:'前提与主题',phase:'立项判断',title:'为什么必须由这个主角来完成？',
+    description:'用六项压力测试验证故事前提，再把主题落实为有代价的选择。',chapters:'第 4 章',time:'约 15 分钟',
+    fields:[
+      {id:'premiseSentence',label:'立项一段话',type:'textarea',required:true,wide:true,placeholder:'谁，在什么压力下，为了什么目标，对抗谁；失败会失去什么，最终必须作出什么不可逆选择？'},
+      {id:'subjectAndGoal',label:'主体与欲望',type:'textarea',required:true,placeholder:'为什么只能是这个主角？目标如何被观察、证实或判定失败？'},
+      {id:'oppositionAndCost',label:'对立力量与双向代价',type:'textarea',required:true,placeholder:'对手想要什么、有何资源？主角失败失去什么，成功又必须放弃什么？'},
+      {id:'ironyAndChoice',label:'反讽与关键选择',type:'textarea',required:true,placeholder:'人物最抗拒的问题为何被推到面前？高潮怎样由此前选择造成？'},
+      {id:'themeValues',label:'主题中的两种对立价值',type:'textarea',required:true,placeholder:'A：主角开场相信什么、得到了什么；B：她抗拒却不断被迫面对什么。'},
+      {id:'themeCounterexample',label:'反例：双方各有什么道理？',type:'textarea',required:true,placeholder:'写一个人物或事件，证明 A 并非全错、B 也并非万能。'},
+      {id:'climaxChoice',label:'高潮中必须付出的选择',type:'textarea',required:true,placeholder:'两种价值不能同时保全时，主角选择什么，牺牲什么？'},
+      {id:'endingEvidence',label:'结局用什么行动回答主题？',type:'textarea',required:true,placeholder:'写行为和后果，避免让角色用一段总结台词代替结局。'}
+    ],
+    checks:[{id:'six',text:'主体、欲望、对立、代价、反讽和选择六项均有具体答案。'},{id:'choice',text:'高潮依赖前文累积的选择与能力，不依赖突降设定或外援。'},{id:'theme',text:'主题已经落实为人物行为和后果，并保留价值冲突的复杂性。'}],
+    tips:[{title:'让目标可以失败',text:'“找回自我”是方向；“在开幕前拿回署名权并通过方案评审”是可以观察、可以失败的目标。'},{title:'主题来自两难',text:'当“证明自己”与“保护合作伙伴”发生冲突时，选择才会暴露人物真正相信什么。'}]
+  },
+  {
+    id:'characters',short:'人物与关系',phase:'立项判断',title:'谁在行动，又是什么让主角无法后退？',
+    description:'建立人物九项引擎和关系矩阵，让每次靠近、冲突与背叛都有事件依据。',chapters:'第 6—9 章',time:'约 20 分钟',
+    fields:[
+      {id:'protagonist',label:'主角的一句话定位',type:'text',required:true,placeholder:'年龄 / 身份 / 人设对撞 / 当前处境'},
+      {id:'characterEngines',label:'主要人物引擎',type:'repeater',required:true,minRows:1,columns:[{id:'name',label:'角色与身份',type:'text',placeholder:'姓名、身份、主角 / 配角 / 对手'},{id:'desire',label:'欲望、需要与错误信念',type:'textarea',placeholder:'她争取什么，必须面对什么，又相信什么？'},{id:'past',label:'形成事件、优势与阴影',type:'textarea',placeholder:'什么经历塑造了她？同一性格如何帮助并伤害她？'},{id:'risk',label:'秘密、底线与越界选择',type:'textarea',placeholder:'秘密公开会改变谁？压力怎样迫使她重写底线？'},{id:'signature',label:'行为签名',type:'textarea',placeholder:'如何施压、回避、求助、撒谎？'}]},
+      {id:'characterArcs',label:'人物弧与触发事件',type:'textarea',required:true,wide:true,placeholder:'开场策略 → 什么事件使策略失效 → 付出什么代价 → 作出什么新选择 → 结局状态'},
+      {id:'antagonistLogic',label:'对立力量的独立逻辑',type:'textarea',required:true,placeholder:'对手争取什么、有哪些资源、为什么此刻阻拦主角？如何符合职业或世界规则？'},
+      {id:'relations',label:'核心关系张力矩阵',type:'repeater',required:true,minRows:1,columns:[{id:'pair',label:'关系双方',type:'text',placeholder:'A ↔ B'},{id:'differences',label:'目标、差距与筹码',type:'textarea',placeholder:'表面目标 / 隐藏需求 / 权力差 / 信息差 / 情感差 / 相互依赖'},{id:'trigger',label:'变化事件与代价',type:'textarea',placeholder:'场次 + 事件 + 选择，怎样改变双方距离？'},{id:'ending',label:'结局距离与下集压力',type:'textarea',placeholder:'最终关系如何变化，带来什么新行动理由？'}]},
+      {id:'voices',label:'人物小传补充与声音锚点',type:'textarea',required:true,wide:true,placeholder:'补充外壳、内核、执念、视觉识别与道具；说明语气、语速、停顿、口音和句尾习惯。'}
+    ],
+    checks:[{id:'engine',text:'主要人物的九项引擎已完整，行动可以追溯到目标、资源和代价。'},{id:'opponent',text:'对立力量拥有独立动机与资源，不只负责让主角受辱或取胜。'},{id:'relations',text:'核心关系的变化绑定具体事件，未靠集数自动升温或决裂。'}],
+    tips:[{title:'同一个优点，也会制造问题',text:'“凡事亲力亲为”能救回危机，也可能让合作伙伴觉得自己永远不被信任。把性格写成行动。'},{title:'关系用事件记账',text:'不要只写“逐渐信任”。写清谁交出了什么筹码，谁为谁承担了一次本可避免的损失。'}]
+  },
+  {
+    id:'outline',short:'全剧与伏笔',phase:'立项判断',title:'从第一幕到最后一幕，因果连得上吗？',
+    description:'先锁定全局方向，再分别记录观众、主角与对手知道的信息。',chapters:'第 10、13—14 章',time:'约 20 分钟',
+    fields:[
+      {id:'episodeCount',label:'计划总集数',type:'text',required:true,placeholder:'例如：12 集；独立短片填写 1 集'},
+      {id:'episodeDuration',label:'单集目标时长',type:'select',required:true,options:['约 1 分钟','约 3 分钟','约 5 分钟','其他 / 按项目确定']},
+      {id:'globalOutline',label:'全剧故事总览',type:'textarea',required:true,wide:true,placeholder:'开端 → 升级 → 转折 → 反攻 → 收尾。覆盖主线、人物弧、主要场景、关键选择和最终状态。'},
+      {id:'episodeOutline',label:'分集主线与状态变化',type:'repeater',required:true,minRows:1,columns:[{id:'episode',label:'集数 / 阶段',type:'text',placeholder:'第 1 集 / 第 1—3 集'},{id:'event',label:'核心事件与行动',type:'textarea',placeholder:'主角做什么、遭遇什么反制？'},{id:'change',label:'回报、代价与下一压力',type:'textarea',placeholder:'本集改变什么？怎样引出下一行动？'}]},
+      {id:'informationLedger',label:'信息差与伏笔账本',type:'repeater',required:true,minRows:1,columns:[{id:'fact',label:'事实 / 信息 ID',type:'text',placeholder:'F01：被隐藏的旧图纸'},{id:'knowledge',label:'谁知道，谁误解',type:'textarea',placeholder:'观众 / 主角 / 对手所知，及错误解释'},{id:'clue',label:'公平线索与埋设位置',type:'textarea',placeholder:'首次出现的场次、可信来源、当前职责'},{id:'payoff',label:'揭示、动作与后果',type:'textarea',placeholder:'在哪集回收，如何证明，怎样改变局势？'}]},
+      {id:'finalEnding',label:'最终结局与伏笔回收',type:'textarea',required:true,wide:true,placeholder:'核心问题怎样回答，人物得到并失去什么，关键伏笔和主要关系怎样收束？'},
+      {id:'continuityRules',label:'全局锁定事项与修订边界',type:'textarea',required:true,placeholder:'时间线、人物身份、能力限制、世界规则、结局方向；需要改动时如何同步受影响分集？'}
+    ],
+    checks:[{id:'whole',text:'全局总览写到最终结局，且分集不是同一冲突重复换皮。'},{id:'ledger',text:'关键秘密已登记知情者、线索、揭示位置与实际后果。'},{id:'continuity',text:'人物弧、时间线和集间承接一致；未回收事项有明确去向。'}],
+    tips:[{title:'结局是前置决定',text:'先知道主角最终必须做什么选择，才能反推前文需要建立哪些能力、关系和代价。'},{title:'同一个事实，三种知情位置',text:'观众领先角色可以制造焦虑，观众落后角色可以制造谜团。账本记录的是叙事安排，不只是秘密名称。'}]
+  },
+  {
+    id:'world',short:'场景与母题',phase:'立项判断',title:'这个故事，需要哪些真正有用的空间？',
+    description:'为场景、道具与声音登记职责，让每个重复出现的元素都有意义。',chapters:'第 24—27 章',time:'约 12 分钟',
+    fields:[
+      {id:'scenes',label:'场景清单',type:'repeater',required:true,minRows:1,columns:[{id:'name',label:'场景编号与名称',type:'text',placeholder:'SCN001 老剧场舞台'},{id:'function',label:'功能与空间条件',type:'textarea',placeholder:'开放度 / 熟悉度 / 压力值 / 时间结构，以及独立剧情功能'},{id:'setting',label:'氛围、陈设与时段',type:'textarea',placeholder:'叙事性关键陈设，常见日夜与内外景'}]},
+      {id:'props',label:'核心道具与状态',type:'repeater',required:true,minRows:1,columns:[{id:'name',label:'道具',type:'text',placeholder:'磨损的比例尺'},{id:'identity',label:'固定特征与初始归属',type:'textarea',placeholder:'识别特征、保管者、开场状态'},{id:'changes',label:'状态变化与剧情职责',type:'textarea',placeholder:'谁何时取得、损坏、归还；如何影响选择或证据？'}]},
+      {id:'motifs',label:'视觉与声音母题',type:'repeater',required:true,minRows:1,columns:[{id:'motif',label:'母题',type:'text',placeholder:'开场铃 / 一束未亮的工作灯'},{id:'first',label:'首次含义',type:'textarea',placeholder:'出现位置与人物当时的理解'},{id:'variation',label:'变奏与回收',type:'textarea',placeholder:'后续如何改变意义，与选择、关系、认知同步？'}]},
+      {id:'soundPlan',label:'声音的叙事职责',type:'textarea',required:true,placeholder:'旁白、台词、环境声、静默和声音桥分别承载什么信息？'},
+      {id:'visualStyle',label:'可执行的风格方向',type:'textarea',required:true,placeholder:'用光线、色彩、材质、空间和节奏描述，避免只写“高级感”。'},
+      {id:'productionLimits',label:'制作条件与场景取舍',type:'textarea',required:true,placeholder:'可用地点、演员规模、动作或生成限制；哪些场景可以合并，哪些必须保留？'}
+    ],
+    checks:[{id:'names',text:'场景清单已建立，正文将引用一致名称，新增地点有独立职责。'},{id:'props',text:'核心道具的固定特征、归属及状态变化可以连续追踪。'},{id:'motifs',text:'母题有计划地变奏，并承担可说明的叙事或情绪职责。'}],
+    tips:[{title:'先问“为什么必须在这里”',text:'舞台、办公室、饭桌不仅是背景。空间中的规则、出入口、见证人和物件都能成为人物的筹码。'},{title:'固定设定与本场增量分开',text:'核心空间和道具先统一登记；分集只补充本次位置、状态和动作变化，减少前后矛盾。'}]
+  },
+  {
+    id:'episode',short:'单集创作卡',phase:'创作设计',title:'这一集结束时，什么必须已经改变？',
+    description:'从单集问题走到每场行动，明确策略、反馈、结果和下一行动理由。',chapters:'第 11—13、28—29 章',time:'约 18 分钟',
+    fields:[
+      {id:'workingEpisode',label:'当前设计的集数',type:'text',required:true,placeholder:'例如：第 1 集'},
+      {id:'episodeQuestion',label:'本集核心戏剧问题',type:'textarea',required:true,placeholder:'本集向观众承诺解决或推进什么具体问题？'},
+      {id:'episodeGoal',label:'主角目标、时限与失败代价',type:'textarea',required:true,placeholder:'她必须在何时之前完成什么？失败失去什么？'},
+      {id:'episodeResources',label:'对立目标、资源与信息差',type:'textarea',required:true,placeholder:'谁阻止她，为什么？双方与观众分别掌握什么？'},
+      {id:'sceneEngine',label:'逐场场景发动机',type:'repeater',required:true,minRows:1,columns:[{id:'scene',label:'场次与地点',type:'text',placeholder:'1-1 老剧场舞台 日 内'},{id:'goal',label:'入场状态、目标与策略',type:'textarea',placeholder:'主行动者想让谁做什么？先采取什么办法？'},{id:'response',label:'反制、反馈与升级',type:'textarea',placeholder:'对方或环境如何回应？为何必须改变策略？'},{id:'change',label:'转折、离场状态与余波',type:'textarea',placeholder:'权力、认知、关系、风险或道具归属如何变化？'}]},
+      {id:'episodeOutcome',label:'本集兑现与角色反应',type:'textarea',required:true,placeholder:'给出什么结果、信息或情绪回报？人物如何反应并承担后果？'},
+      {id:'episodeContinuity',label:'与前后集的承接',type:'textarea',required:true,placeholder:'承接了什么上集问题，留下什么下一行动理由？第一集写开篇承诺。'},
+      {id:'scriptDraft',label:'分场剧本草稿',type:'textarea',required:false,wide:true,placeholder:'可在此写正文：第 X 集 → X-Y 场景名 日/夜 内/外 → 人物 → △动作 → 角色名：台词。'}
+    ],
+    checks:[{id:'engine',text:'每场都能找到目标、阻力、策略、反馈和可观察变化。'},{id:'reward',text:'本集提供了实际回报，而不是只把高潮截断。'},{id:'delete',text:'删除某场若不影响信息、关系或剧情，已考虑合并或重写。'}],
+    tips:[{title:'把“吵架”改成行动',text:'“两人在舞台争吵”还不够。明确一方要签收设备，另一方拒绝，并用怎样的证据改变签收条件。'},{title:'正文与设计卡各有职责',text:'创作卡记录内部判断；交付正文使用自然语言、动作和对白呈现，不机械展示内部节拍元数据。'}]
+  },
+  {
+    id:'hooks',short:'钩子与反转',phase:'创作设计',title:'观众在等的答案，准备怎样兑现？',
+    description:'把开场承诺、集尾悬念、爽点和反转放入同一条铺垫与兑现链。',chapters:'第 15—18 章',time:'约 15 分钟',
+    fields:[
+      {id:'openingMechanism',label:'开场主机制',type:'select',required:true,options:['身份 / 能力反差','危机 / 倒计时','关系裂缝','规则异常','道德困境']},
+      {id:'openingMoment',label:'第一画面与具体问题',type:'textarea',required:true,wide:true,placeholder:'观众第一眼看见什么异常？为什么会想知道答案？'},
+      {id:'hookLedger',label:'集尾钩子与兑现位置',type:'repeater',required:true,minRows:1,columns:[{id:'episode',label:'集数与钩子类型',type:'text',placeholder:'第 1 集 / 危机型'},{id:'question',label:'尚未解决的具体问题',type:'textarea',placeholder:'观众想知道哪个答案或人物选择？'},{id:'payoff',label:'回应位置与后果',type:'textarea',placeholder:'下一集如何尽早推进，并产生新条件？'}]},
+      {id:'turns',label:'主反转四组件',type:'repeater',required:true,minRows:1,columns:[{id:'clue',label:'公平线索',type:'textarea',placeholder:'事前可见、且有当前职责的事实'},{id:'misread',label:'错误解释',type:'textarea',placeholder:'谁为何形成合理误判？'},{id:'reveal',label:'揭示动作',type:'textarea',placeholder:'如何用行动、道具或结果重释信息？'},{id:'consequence',label:'现实后果',type:'textarea',placeholder:'揭晓后谁必须改变目标、关系或策略？'}]},
+      {id:'emotionalReward',label:'主要回报的蓄力与兑现',type:'textarea',required:true,placeholder:'具体压力 → 人物选择 → 证据或能力兑现 → 实际回报；非爽剧可写理解、线索或关系变化。'},
+      {id:'aftershock',label:'高潮后的余震',type:'textarea',required:true,placeholder:'对手、伙伴、主角如何反应？改变了哪些资源、关系与行动条件？'},
+      {id:'hookVariation',label:'机制变化与重复检查',type:'textarea',required:true,placeholder:'连续亮点是否只是更换人物道具？重复怎样承担升级、回扣或新的代价？'}
+    ],
+    checks:[{id:'promise',text:'开场问题、阶段回报与集尾钩子服务同一条主线。'},{id:'turn',text:'主反转有公平线索、错误解释、揭示动作和现实后果。'},{id:'payoff',text:'钩子有明确回应位置，高潮后留出了人物反应与后果。'}],
+    tips:[{title:'悬念要能被具体复述',text:'“她发现了秘密”太抽象。“设备签收单上出现了她五年前的签名”才形成可以追问的问题。'},{title:'惊讶之后，必须行动',text:'反转完成的标志不是人物愣住，而是旧策略失效、关系改变，或下一次选择变得更困难。'}]
+  },
+  {
+    id:'rhythm',short:'节奏与情绪',phase:'创作设计',title:'哪里让人屏息，哪里让人喘口气？',
+    description:'先选情绪曲线，再按人物行动和试读结果安排节拍强度。',chapters:'第 19—21 章',time:'约 12 分钟',
+    fields:[
+      {id:'emotionCurve',label:'主情绪曲线',type:'select',required:true,options:['爽剧型：压力与释放交替','甜宠型：稳定甜感与关系推进','悬疑型：紧张与认知更新','虐心型：关系建立、失去与爆发','治愈型：细节积累与温暖余韵','反转型：预期建立与重释']},
+      {id:'beats',label:'本集节拍与强度',type:'repeater',required:true,minRows:1,columns:[{id:'position',label:'相对位置 / 预计时长',type:'text',placeholder:'开场 / 约 0—15 秒'},{id:'action',label:'人物行动与有效变化',type:'textarea',placeholder:'新策略、证据、关系、风险或动作结果'},{id:'intensity',label:'强度与情绪职责',type:'text',placeholder:'1—5；蓄力 / 紧张 / 回报 / 余韵'}]},
+      {id:'pressureRelease',label:'压力与回报如何交替？',type:'textarea',required:true,placeholder:'哪里兑现局部成果？哪里提高价格？主回报由什么累积而来？'},
+      {id:'readingEstimate',label:'朗读与动作估时计划',type:'textarea',required:true,placeholder:'预计对白、动作、反应各占多少时间？哪些位置需试读或排演后调整？'},
+      {id:'quietFunction',label:'留白与呼吸段的职责',type:'textarea',required:true,placeholder:'人物在沉默中做什么？结束时认知、情感距离或物件意义有什么变化？'},
+      {id:'feedbackHypothesis',label:'节奏风险与验证方法',type:'textarea',required:false,wide:true,placeholder:'怀疑哪段太赶、太水或承诺错位？准备如何通过试读、试看片或版本对照确认？'}
+    ],
+    checks:[{id:'curve',text:'情绪曲线符合主类型，重要信息与情绪回报有轻重。'},{id:'variation',text:'有效变化来自人物行动和反馈，而不只是切换角度。'},{id:'timing',text:'原规范的比例、秒数与强度已作为参考，实际节奏将由试读和动作估时校准。'}],
+    tips:[{title:'变化比切镜更重要',text:'换一个角度看同一个状态，未必让故事向前。检查人物有没有换策略，观众有没有获得新信息。'},{title:'给回报一点余温',text:'证据揭晓之后，留出人物决定如何回应的空间。强度最高不等于每一秒都塞满信息。'}]
+  },
+  {
+    id:'dialogue',short:'台词与可拍性',phase:'创作设计',title:'这些话，只有这个人物会这样说吗？',
+    description:'用语言策略打磨对白，同时检查动作、证据和制作形态能否支撑表达。',chapters:'第 22—23、27—28 章',time:'约 15 分钟',
+    fields:[
+      {id:'voiceRules',label:'角色语言区分',type:'textarea',required:true,wide:true,placeholder:'按身份、关系、目的说明语气和表达习惯；同一件事，不同角色怎样说？'},
+      {id:'dialogueSamples',label:'关键对白与潜台词',type:'repeater',required:true,minRows:1,columns:[{id:'speaker',label:'场次与人物',type:'text',placeholder:'1-2 许知夏'},{id:'line',label:'台词原句',type:'textarea',placeholder:'一句可以被演员读出来的话'},{id:'strategy',label:'语言动作与潜台词',type:'textarea',placeholder:'试探 / 拒绝 / 交换 / 逼迫；真正想得到什么？'},{id:'evidence',label:'动作、证据与结果',type:'textarea',placeholder:'画面或后果如何支撑这句话？'}]},
+      {id:'themeLines',label:'核心传播句或等价母题',type:'textarea',required:false,placeholder:'由具体情境、选择和代价支撑；无对白作品可写视觉或声音表达。'},
+      {id:'dialogueTiming',label:'对白试读与反应空间',type:'textarea',required:true,placeholder:'如何核验朗读时长、呼吸、动作和对手反应？长台词是否需要改写或分段？'},
+      {id:'feasibility',label:'可拍性风险清单',type:'repeater',required:true,minRows:1,columns:[{id:'risk',label:'风险与所在场次',type:'text',placeholder:'多人互动 / 复杂动作 / 细微表情 / 道具一致性'},{id:'meaning',label:'必须保留的叙事信息',type:'textarea',placeholder:'这场真正需要让观众理解什么？'},{id:'solution',label:'处理方式与验证',type:'textarea',placeholder:'拆分动作、简化空间、可见证据、试拍或生成测试'}]},
+      {id:'mediumAdaptation',label:'呈现形态专项适配',type:'textarea',required:false,placeholder:'AI 真人可记录动作、口型及一致性测试；真人可记录演员、地点和排演条件。'},
+      {id:'formatReview',label:'正文格式复核',type:'textarea',required:true,placeholder:'核对分集、场次、场景清单、人物、△动作、对白、VO / OS 及必要上屏文字。'},
+      {id:'sourceDialogue',label:'已有台词的修改权限',type:'textarea',required:false,placeholder:'如用户提供原台词：哪些必须逐字保留，哪些允许改写？无原台词写“原创”。'}
+    ],
+    checks:[{id:'voice',text:'关键台词符合人物身份、当前策略和关系，具有动作或事实支撑。'},{id:'film',text:'关键意义有可呈现的证据，复杂动作与制作风险已登记。'},{id:'format',text:'正文采用一致的分集分场格式，声音类型和场景名称清楚。'}],
+    tips:[{title:'让对白做事',text:'“我不是那种人”是在自我评价；“签收单先给我，我核对完再走”是在争取控制权。'},{title:'按呈现形态启用限制',text:'原规范第 27 章包含 AI 生成适配项。结合本项目的媒介与实际能力逐项登记，避免把未测试的能力当成确定条件。'}]
+  },
+  {
+    id:'revision',short:'改稿与验收',phase:'审改交付',title:'最早的问题，出现在故事的哪里？',
+    description:'按七轮改稿逐层复核，从最早失效点修订，并追踪连带影响。',chapters:'第 30—31 章',time:'约 20 分钟',
+    fields:[
+      {id:'revisionRounds',label:'七轮改稿记录',type:'repeater',required:true,minRows:7,columns:[{id:'round',label:'改稿轮次',type:'select',options:['前提轮','结构轮','人物轮','关系轮','场景轮','台词轮','导演与可拍轮']},{id:'issue',label:'问题与证据位置',type:'textarea',placeholder:'具体集数 / 场次，出现了什么可复核问题？'},{id:'action',label:'修订动作与连带影响',type:'textarea',placeholder:'从哪里开始改？哪些下游分集、伏笔或关系要同步？'}]},
+      {id:'blockingIssues',label:'当前阻断问题',type:'textarea',required:true,placeholder:'哪些问题会使后续润色失效？若无，写明已检查的依据。'},
+      {id:'earliestFailure',label:'最早失效点',type:'textarea',required:true,placeholder:'问题的根源在哪个前提、设定或场次？避免只在结尾补解释。'},
+      {id:'revisionImpact',label:'跨集修订与版本影响',type:'textarea',required:true,placeholder:'修改哪项上游设定，哪些正文、人物关系和伏笔需同步复核？'},
+      {id:'acceptanceEvidence',label:'验收依据与未达标处理',type:'textarea',required:true,wide:true,placeholder:'逐项复核因果、钩子兑现、人物、证据、台词、关系、亮点、节奏、完整性、可拍性、跨集一致性和交付完整性。'},
+      {id:'handoffPackage',label:'本次交付包',type:'chips',required:true,options:['项目总览','人物小传','关系矩阵','分集大纲','分场正文','信息与伏笔账本','场景道具清单','修订记录','风险核验记录']}
+    ],
+    checks:[{id:'rounds',text:'七轮改稿均有实际复核记录，前序阻断问题已处理或明确保留。'},{id:'evidence',text:'审稿意见包含具体位置、问题、影响和修改目标。'},{id:'sync',text:'修订后的总览、正文、关系、伏笔与场景清单相互一致。'}],
+    tips:[{title:'先改根因，再改措辞',text:'如果高潮缺乏证据，优先回到最早应埋设线索的场次。增加一句“其实我早就知道”不能修复因果。'},{title:'填写完成不等于审稿通过',text:'表单检查只帮助发现缺项；内容是否成立，需要你结合正文、试读和审稿意见逐项确认。'}]
+  },
+  {
+    id:'finalize',short:'风险与定稿',phase:'审改交付',title:'交付之前，还有什么需要说清楚？',
+    description:'核实真实资料、权利与目标平台要求，保留待核验项，形成可追溯的定稿档案。',chapters:'第 32 章及附录',time:'约 12 分钟',
+    fields:[
+      {id:'rightsAndFacts',label:'真实事实与权利使用范围',type:'textarea',required:true,wide:true,placeholder:'人物、品牌、IP、地点、音乐或原作有哪些真实来源？哪些是独立虚构？需要什么授权？'},
+      {id:'verificationLog',label:'核验事项与记录',type:'repeater',required:true,minRows:1,columns:[{id:'item',label:'核验事项',type:'text',placeholder:'平台规则 / 职业事实 / 场地授权 / 原作版权'},{id:'source',label:'来源、日期与责任人',type:'textarea',placeholder:'官方文件、资料或授权记录；未取得时明确写待核验'},{id:'status',label:'状态与处理方案',type:'select',options:['待核验','已核验','不适用']},{id:'action',label:'核验结果或后续动作',type:'textarea',placeholder:'结论、剩余问题及定稿前如何处理'}]},
+      {id:'contentBoundaries',label:'内容风险与表达处理',type:'textarea',required:true,placeholder:'按项目识别暴力、亲密关系、未成年人、公共事件等风险；说明叙事必要性及表达方式。'},
+      {id:'unresolved',label:'尚未解决的事项',type:'textarea',required:true,placeholder:'列出尚待确认的事实、授权和规则；若无，写明本次检查范围。'},
+      {id:'finalStatement',label:'本次定稿说明',type:'textarea',required:true,wide:true,placeholder:'版本、适用范围、主要修改、已核验范围及交付边界。草案阶段请明确标注。'},
+      {id:'finalDeliverables',label:'最终档案包含',type:'chips',required:true,options:['创作前置判断','全剧与分集规划','人物与关系','场景与道具','伏笔与钩子','节奏与台词方案','分场剧本','审改与核验记录']},
+      {id:'finalVersion',label:'版本标识',type:'text',required:true,placeholder:'例如：v0.1 创作方案 / v1.0 定稿'}
+    ],
+    checks:[{id:'verified',text:'真实事实、权利与平台规则已按当前交付范围核验，未核验项清楚可见。'},{id:'risk',text:'风险内容的表达经过审阅，未靠改名或模糊措辞替代核验。'},{id:'final',text:'我已检查本次版本及交付边界，确认可以导出这份创作档案。'}],
+    tips:[{title:'定稿也要保留边界',text:'记录本次核验了什么、依据什么，以及仍需谁确认。创作规划完成，不自动等于已具备发布或拍摄条件。'},{title:'把判断留在档案里',text:'导出时保留每步填写与确认状态，后续改稿才能知道当初为什么作出这一选择。'}]
+  }
+];
+
+window.DEMO_PROJECT = {
+  name:'她的第二次开场',
+  values:{
+    audience:'有职业积累、经历照护中断，正在重返职场的都市女性',
+    platform:'抖音',
+    pain:'熟练掌握旧岗位的工作，却要重新证明自己；一边照顾家人，一边担心被贴上“跟不上了”的标签。',
+    desire:'看见经验仍然有价值，也看见争取机会需要重新学习合作，而不是一个人撑住全部。',
+    mechanisms:['代入认同','代偿满足','情感宣泄'],
+    promise:'一个离开舞台五年的舞美设计师，用真正的职业能力拿回署名与选择权，也学会不再独自承担所有责任。',
+    research:'示例定位，尚无真实用户访谈或平台数据支持。待选取目标样本访谈，再验证“职业尊严与合作”是否为主要观看动机。',
+    medium:'真人',genre:'职场 / 商战',setting:'当代沿海城市，一座即将重新开幕的老剧场。',emotionalTone:'克制、明快；职业对抗有力度，生活细节保留温度。',
+    storyEngine:'开幕倒计时中的舞台任务：发现故障 → 提出方案 → 遭遇资源与责任阻力 → 试验与反馈 → 重新谈判。署名争议贯穿各集。',
+    sevenGenes:'世界：老剧场复演；形态：真人竖屏；冲突：重返职场与署名争议；人物：能力强、过度负责的设计师；结构：线性任务推进；情绪：职业尊严与温暖合作；反转：旧设计档案重释。',
+    differences:'固定都市女性重返职场的基础方向。差异一：将办公室晋升改为可见的舞台工程任务，让能力通过实际测试证明。差异二：将“证明自己从未出错”改为“承认旧错后争取署名”，使胜利依赖承担责任。',
+    secondaryGenre:'家庭现实作为辅助类型：母女照护与同事协作共同逼迫主角讨论边界；不另开家庭恶人支线。',
+    typePromise:'主角通过已展示的设计、协调与测试能力完成首演；拿回署名的同时，公开承认自己在旧事故中的疏忽并承担重做成本。',
+    premiseSentence:'离职五年的舞美设计师许知夏，为争取复演项目的首席署名，必须在十二天内修复老剧场升降台方案，并对抗掌握采购和审核资源的前搭档陆承。她发现署名争议与自己的旧设计失误有关；最终必须在保住完美履历与公开错误、共同重做之间作出选择。',
+    subjectAndGoal:'只有许知夏熟悉旧图纸与舞台原始布局，也只有她同时被旧事故和家庭照护经历束缚。目标：开幕前通过方案审核、明确署名，并完成安全可行的复演交付。',
+    oppositionAndCost:'陆承想保住剧场信誉与自己的项目负责人位置，掌握预算、供应商和审核流程。许知夏失败会失去重返行业的窗口；成功则需放弃“当年全是别人夺走成果”的自我解释，并承担补做成本。',
+    ironyAndChoice:'她最擅长独自修复方案，也最害怕别人看见自己的错误；真正的解法却是交出旧图纸，让年轻同事共同核对并公开承认疏漏。高潮由她保留原始档案、坚持复测和逐步授权的选择造成。',
+    themeValues:'A：只要自己扛住，就能保护家人和团队，也能保住专业形象。B：真正可靠的合作，需要公开问题、协商责任和允许别人参与。',
+    themeCounterexample:'陆承曾独自承担一笔应急费用，确实保住了剧场，但隐瞒责任让团队无法改进。年轻同事周禾积极协作，却也曾未经核对公开片面结论，证明“公开”本身并不等于负责。',
+    climaxChoice:'首演前的最后审核，知夏可以交付一个表面通过、仍存疑点的方案；她选择主动提交复测记录，暂停彩排并公开旧错，承担预算损失和署名暂缓的风险。',
+    endingEvidence:'修订后的署名页同时列出知夏与周禾。知夏把控制台钥匙交给完成培训的周禾，自己走进观众席陪母亲听开场铃。',
+    protagonist:'许知夏，34 岁，重返行业的舞美设计师；精确、能干，却把所有责任都揽在自己身上。',
+    characterEngines:[
+      {name:'许知夏 / 主角 / 舞美设计师',desire:'欲望：拿回复演项目署名。需要：承认错误并建立协作。错误信念：只要我不出错、自己扛住，就不会再被抛下。',past:'五年前在母亲住院与项目交付之间奔波，交接核验不完整。优势是精确、善于现场解决问题；阴影是拒绝求助、控制细节。',risk:'秘密：旧图纸里有她漏掉的一次现场复核。底线：不让团队看到自己的失误。越界选择：主动公开原始档案和复测结果。',signature:'紧张时反复校准比例尺；不确定时先说“我来处理”。后期改为先问“你需要什么资料”。'},
+      {name:'陆承 / 对手 / 项目负责人',desire:'欲望：确保开幕并保住项目控制权。需要：承认保密与压责造成的长期伤害。错误信念：只有由我决定谁知道什么，项目才能活下来。',past:'五年前垫付应急费用、处理过舆情；善于调度资源，也习惯用“保护团队”压住异议。',risk:'秘密：曾删除一份能说明责任分担的交接附件。底线：不让剧场在开幕前停摆。越界选择：允许延迟彩排并交出采购记录。',signature:'在谈判中先递水、再要求签字；习惯说“先把事情做完”。'},
+      {name:'周禾 / 配角 / 助理设计师',desire:'欲望：获得真实参与和署名。需要：先核实再表达。错误信念：只要快速揭穿权威，就能证明自己。',past:'上一份项目中只做执行，没有被署名。优势是数字建模和直接沟通；阴影是急于下结论。',risk:'秘密：保存了不完整的旧设备测试片段。底线：不再做无名助手。越界选择：撤回未经核实的指控，陪知夏重新复测。',signature:'先打开电脑展示证据，遇到反问会急着把话说满；成长后主动标注“这条还没核实”。'}
+    ],
+    characterArcs:'知夏：独自排障 → 因隐瞒旧图纸失去周禾信任 → 公开错误并共同复测 → 交出控制台钥匙。陆承：用控制保项目 → 资源隐瞒反噬进度 → 交出采购记录并接受责任划分。周禾：急于证明 → 误读证据 → 承认不确定性并完成协作。',
+    antagonistLogic:'陆承承担开幕合同与场地运营压力，有明确预算和供应商限制。他阻止知夏翻旧案，是担心责任争议拖延开幕，也保护自己的控制权；他的判断有现实依据，但隐瞒行为造成更大风险。',
+    relations:[
+      {pair:'许知夏 ↔ 陆承',differences:'知夏争取署名，陆承争取准时开幕；陆承权力领先，知夏掌握旧设计知识。双方都担心被证明失职，互相依赖又不信任。',trigger:'第 5 集：陆承以预算换取放弃追责，知夏拒绝。第 9 集：知夏先公开自己的失误，迫使陆承交出附件。',ending:'从争夺叙述权转为公开划分责任；合作继续，但资源与信息需留痕。'},
+      {pair:'许知夏 ↔ 周禾',differences:'知夏想保持控制，周禾想获得参与；知夏经验领先，周禾技术工具领先。双方都渴望被认可，却把对方视作风险。',trigger:'第 3 集：知夏未说明原因否决建模方案。第 7 集：周禾发现旧图纸并质疑隐瞒；第 8 集：两人共同复测。',ending:'互相授权并共同署名；周禾独立操作控制台，知夏接受自己不必站在所有位置。'}
+    ],
+    voices:'知夏外壳干练、内核害怕失职，执念是“我不能再缺席”；旧比例尺是识别物。台词短，先报结果再谈感受。陆承语气温和、常用流程语言，停顿后提出条件。周禾语速稍快、偏技术表达，后期学会留下核验余地。',
+    episodeCount:'12 集',episodeDuration:'约 3 分钟',
+    globalOutline:'第 1—3 集：知夏发现旧舞台问题并争取测试机会；与周禾发生方法冲突。第 4—6 集：署名与预算谈判升级，旧附件浮现。第 7—9 集：知夏承认交接疏漏，与周禾复测，陆承交出记录。第 10—12 集：暂停彩排、完成重做、公开责任与署名，首演落幕。',
+    episodeOutline:[
+      {episode:'第 1—3 集 / 钩子与行动',event:'知夏发现升降台定位偏差，以现场复测争取一次方案评审。她否决周禾方案，却未解释旧图纸风险。',change:'获得试做机会；周禾开始质疑她的控制欲。旧图纸上的手写尺寸成为伏笔。'},
+      {episode:'第 4—6 集 / 升级与转折',event:'陆承要求以放弃旧署名追责换预算。知夏拒绝，寻找采购与交接记录。',change:'拿到部分证据，却发现自己的签名也在问题图纸上。'},
+      {episode:'第 7—9 集 / 低谷与合作',event:'周禾公开质疑知夏。知夏交出全部原始资料，承认疏漏；两人复测，陆承交出被删除的附件。',change:'责任从单一指控变为需要共同承担；团队获得真实问题清单。'},
+      {episode:'第 10—12 集 / 高潮与收束',event:'知夏主动暂停彩排，公开风险并组织重做；首演前完成复核，协商署名与责任。',change:'复演完成，署名公开。知夏交出控制台钥匙，走入观众席。'}
+    ],
+    informationLedger:[
+      {fact:'F01：旧图纸上的知夏签名',knowledge:'观众第 1 集看见手写尺寸；知夏知道曾签字，但误以为后续已复核；陆承知道附件被删；周禾只知道局部截图。',clue:'1-2 工作间：周禾用旧图对照设备，纸角签名被工具压住。尺寸备注自然用于定位故障。',payoff:'第 6 集打开完整图纸，签名与日期证明知夏参与旧交接；她必须从追责他人转为调查自己。'},
+      {fact:'F02：被删除的交接附件',knowledge:'陆承知道附件曾要求现场复核；知夏只记得收到“已处理”的回复；观众第 4 集看到附件编号缺页。',clue:'4-1 办公室：对照采购清单时出现连续编号缺口，承担核对费用的当前职责。',payoff:'第 9 集陆承交出原件，明确“需复核”未真正执行；团队共同修正责任与方案。'}
+    ],
+    finalEnding:'知夏公开承认旧交接疏漏，陆承承认删附件和压责，团队以复核记录重建责任。舞台通过复测，首演开幕。署名页列知夏、周禾和团队实际职责；旧图纸进入留痕档案。母亲在观众席把身边空位留给知夏。',
+    continuityRules:'时间线为十二天；知夏具备设计与现场排障能力，不擅长独立完成数字控制。周禾掌握建模工具，不能凭一个截图推断全部责任。原始图纸与采购记录的日期固定。结局不以投资人突然救场解决预算。',
+    scenes:[
+      {name:'SCN001 老剧场舞台',function:'封闭、熟悉、高压、线性；承担测试、公开协作和最终交付。',setting:'工作灯、升降台标线、控制台；日夜内景，灰蓝舞台与暖色工作灯。'},
+      {name:'SCN002 设计工作间',function:'封闭、熟悉、中压；承担证据核对、方案争论、交出旧图纸。',setting:'图纸柜、比例尺、显示器；日夜内景，物件与文件保持明确位置。'},
+      {name:'SCN003 剧场办公室',function:'封闭、高压；陆承控制预算、合同与交接档案，形成制度阻力。',setting:'会议桌、签字笔、采购档案；日内，空间整洁，资料是谈判筹码。'},
+      {name:'SCN004 观众席',function:'低压到温暖；母女关系与主角最终交出控制权的落点。',setting:'两张相邻座椅、开场铃；夜内，由空位变为主角坐下。'}
+    ],
+    props:[
+      {name:'旧比例尺',identity:'铝制，边角有磨损，刻度旁有蓝色标记；知夏随身保管。',changes:'第 1 集反复校准表达控制欲；第 8 集交给周禾复测；第 12 集留在公共工具板上。'},
+      {name:'旧交接图纸',identity:'纸角有知夏签名与固定日期，附件编号连续；最初在图纸柜。',changes:'局部尺寸帮助排障，完整签名引发责任反转，最终与复测记录一同归档。'}
+    ],
+    motifs:[
+      {motif:'开场铃',first:'第 1 集彩排铃响，知夏仍被挡在舞台边，意味着错过与排除。',variation:'第 7 集铃声打断争吵，成为倒计时压力；第 12 集铃响，她主动坐到观众席，意味着能够放心交出责任。'},
+      {motif:'手中比例尺',first:'校准、控制与“只有我能保证正确”。',variation:'共同复测时交给周禾，代表承认他人的能力；结束时挂回工具板，成为团队共有的工作物件。'}
+    ],
+    soundPlan:'现场机械声用于验证设备结果；开场铃随人物认知改变意义；母女场景减少解释性旁白，用称呼、空位与环境声传达距离。重要设备声音由专业顾问核验。',
+    visualStyle:'工作区以灰蓝和裸露材料为主，暖色工作灯标记协作空间。文件、标线、距离变化承担信息；最终观众席保持柔和暖光，不额外制造炫技镜头。',
+    productionLimits:'核心地点集中在同一剧场的四个空间。真实升降设备动作需场地和专业人员确认；危险动作通过安全的局部操作与反应表达，不让演员在运动设备上冒险。',
+    workingEpisode:'第 1 集',
+    episodeQuestion:'许知夏能否在不被接纳的情况下，争取一次用实际结果证明自己的测试机会？',
+    episodeGoal:'在当天彩排结束前阻止错误设备签收，并获得一次复测窗口；失败将被排除在复演项目之外。',
+    episodeResources:'陆承要准时签收设备，掌握签字与预算；知夏掌握旧舞台结构知识；周禾掌握模型，但尚未核对旧尺寸。观众先看到舞台标线有偏移。',
+    sceneEngine:[
+      {scene:'1-1 老剧场舞台 日 内',goal:'知夏在围栏外发现定位偏差，要求暂停签收；先用经验口头提醒。',response:'陆承要求可核验结果，供应商强调设备测试已完成；彩排铃即将响。',change:'知夏提出不启动设备的静态复核，以承担延误责任换取十分钟。陆承同意一次测试。'},
+      {scene:'1-2 设计工作间 日 内',goal:'知夏寻找旧基准尺寸；周禾拿出模型，希望参与复测。',response:'知夏发现模型沿用错误坐标，却只说“这版不能用”；周禾要求具体依据。',change:'旧图纸上的手写尺寸证明偏差来源，知夏获得证据；纸角签名被工具遮住，为后续留下线索。'},
+      {scene:'1-3 老剧场舞台 日 内',goal:'知夏用标线与旧尺寸完成静态核对，争取复演设计机会。',response:'偏差得到确认，陆承同意暂缓签收，但要求她一并核对五年前的交接图纸。',change:'得到试做机会，也被拉回旧责任。她收到完整交接图扫描件，自己的签名露出。'}
+    ],
+    episodeOutcome:'定位偏差被具体证明，设备签收暂停；知夏得到第一次职业回报。她还未能接受周禾的合作提议，反应中保留防御。',
+    episodeContinuity:'开篇承诺是“用能力重新入场”。集尾扫描件出现知夏签名，下一集先回应文件为何存在，再展开署名与责任争议。',
+    scriptDraft:'第 1 集\n\n1-1 老剧场舞台 日 内\n人物：许知夏、陆承、周禾\n△知夏停在围栏外，盯着舞台地面的两条标线。\n许知夏：先别签收。右侧基准线偏了。\n陆承：测试单在这里。你有什么新结果？\n△知夏把旧比例尺放到台沿，指向两条线的交点。\n许知夏：给我十分钟。不启动设备，只核尺寸。\n△陆承看向墙上的彩排时间表，把签字笔扣上。\n陆承：十分钟。你来记延误原因。\n\n（示例片段，尚非完整分集正文。）',
+    openingMechanism:'身份 / 能力反差',
+    openingMoment:'一群人准备签收舞台设备，只有站在围栏外、没有工作证的知夏指出标线偏差。观众的问题：她凭什么比项目组更确定？',
+    hookLedger:[
+      {episode:'第 1 集 / 信息差型',question:'完整旧图纸上为何有知夏的签名？',payoff:'第 2 集开头解释当年的交接背景，并发现“已复核”记录缺少附件。'},
+      {episode:'第 6 集 / 关系与选择型',question:'周禾发现知夏参与旧错后，还会继续合作吗？',payoff:'第 7 集先发生具体质询；知夏交出资料而非要求信任，合作条件因此改变。'}
+    ],
+    turns:[{clue:'旧图纸中的手写尺寸、签字日期与连续附件编号在前文出现。',misread:'知夏以为自己的方案被拿走、责任也与自己无关；周禾将局部截图误读为知夏故意隐瞒全部事实。',reveal:'第 9 集对照原始附件、回复与复测记录，显示交接疏漏和删附件分别造成什么后果。',consequence:'知夏从追责转向共同重做，陆承交出资源控制，周禾撤回片面结论；团队承担延期与补做成本。'}],
+    emotionalReward:'被拒绝的专业提醒 → 争取静态复核 → 标线证实偏差 → 获得一次试做机会。全剧回报由排障、承认错误、共同复测积累，最终拿回署名和决定权。',
+    aftershock:'首演前暂停彩排后，团队要面对真实成本；陆承不再独自决定，周禾得到明确责任，知夏向母亲解释为何这次不能按原计划回家。回报伴随关系重新协商。',
+    hookVariation:'前段用能力反差，中段用证据重释，高潮用有代价的选择。旧图纸重复出现时，职责从排障依据变为责任证据，再变为团队留痕制度。',
+    emotionCurve:'爽剧型：压力与释放交替',
+    beats:[
+      {position:'开场 / 约 0—20 秒',action:'围栏外的知夏指出设备偏差，签收被短暂停住。',intensity:'3；能力反差与具体问题'},
+      {position:'前中段 / 约 20—70 秒',action:'陆承要求证据，知夏争取静态复核，周禾提出模型。',intensity:'3—4；目标和资源限制'},
+      {position:'中后段 / 约 70—145 秒',action:'旧尺寸与现场标线对照，知夏证明偏差并获得机会。',intensity:'4—5；能力兑现与局部回报'},
+      {position:'结尾 / 约 145—180 秒',action:'人物反应后，完整扫描件露出知夏签名。',intensity:'3—4；回报余温与新问题'}
+    ],
+    pressureRelease:'开场被拒 → 获得十分钟 → 找到具体依据 → 争取试做机会 → 旧签名增加代价。每次回报都扩大下一次选择的责任。',
+    readingEstimate:'先完成完整台词朗读，再计入取图、核对标线及人物反应时间。当前区间仅为试写安排，设备细节与动作完成时间需排演校准。',
+    quietFunction:'知夏看到自己的签名后，手指停在屏幕边，没有立即辩解。她收起比例尺，转而打开原始档案，沉默结束于新的调查行动。',
+    feedbackHypothesis:'重点验证工作术语是否影响理解、旧签名是否太早压过能力回报。邀请试读者复述本集目标与集尾问题，再据此调整信息密度。',
+    voiceRules:'知夏先说具体对象和条件，避免抽象自证；陆承以流程、期限和责任提出限制；周禾用模型与数据表达判断，但容易省略不确定性。母女对话少解释职业术语，多用具体日常安排。',
+    dialogueSamples:[
+      {speaker:'1-1 许知夏',line:'给我十分钟。不启动设备，只核尺寸。',strategy:'交换：用低风险、限时的办法争取复核窗口。潜台词是“请用结果判断我”。',evidence:'她把比例尺放到台沿；后续静态测量给出可核验的偏差。'},
+      {speaker:'1-1 陆承',line:'十分钟。你来记延误原因。',strategy:'让步并保留责任控制。潜台词是“我允许你试，但后果要有人承担”。',evidence:'他扣上签字笔并看时间表，暂停签收由具体动作确认。'},
+      {speaker:'第 8 集 许知夏',line:'这一页是我漏的。剩下的，我们重新量。',strategy:'承认并邀请合作；不再用完美形象换取信任。',evidence:'她交出完整图纸，把比例尺递给周禾，开始共同复测。'}
+    ],
+    themeLines:'“这一页是我漏的。剩下的，我们重新量。”由公开失误与共同复测支撑；结尾交出控制台钥匙作为等价行动回扣。',
+    dialogueTiming:'逐角色朗读，核对技术词能否听懂；暂停签收、放下工具、接过图纸等动作保留反应时间。原规范语速数值仅供试读参考，具体按演员和信息难度校准。',
+    feasibility:[
+      {risk:'1-1 升降设备与多人互动',meaning:'观众需要看懂标线偏差与签收被暂停，不需要看危险设备运行。',solution:'采用设备静止状态、地面标线和测量结果；专业人员确认尺寸与操作。主体行动按知夏提出、陆承反制、周禾反馈依次组织。'},
+      {risk:'第 9 集 纸面证据可读性',meaning:'观众需要区分“原图错误”“附件被删”和“复测后果”。',solution:'让每份文件对应一个明确问题，用角色核对动作分次呈现，避免一次展示大量小字。'}
+    ],
+    mediumAdaptation:'本项目为真人短剧：需核对场地、机械设备、演员操作与安全条件。若改为 AI 真人，另行测试多人物位置、纸面文字、手持工具及口型一致性。',
+    formatReview:'正文采用“第 X 集 / X-Y 场景名 日夜 内外 / 人物 / △动作 / 角色名：台词”。场景名称取自清单；本示例暂无必须使用的 OS，环境铃声单独注明来源。',
+    sourceDialogue:'示例台词为本项目原创草案，无逐字保留的外部原台词。正式引用、改编或委托内容需另行确认修改权限。',
+    revisionRounds:[
+      {round:'前提轮',issue:'开场版本只写“找回自我”，目标不可验收。',action:'改为开幕前取得署名并通过方案评审；同步更新全剧与分集目标。'},
+      {round:'结构轮',issue:'旧附件若到第 9 集首次出现，会使反转缺乏线索。',action:'在第 4 集采购核对中出现编号缺页，第 6 集对照签名；同步伏笔账本。'},
+      {round:'人物轮',issue:'知夏若一直正确，最终承认失误会突兀。',action:'第 3 集保留她拒绝解释、控制协作的行动，并记录其现实后果。'},
+      {round:'关系轮',issue:'周禾从质疑到信任的过渡缺少具体交换。',action:'第 8 集增加交出原始资料和共同复测，让信任基于行动。'},
+      {round:'场景轮',issue:'办公室两次谈判可能重复传达预算压力。',action:'第一次争取资源，第二次用附件改变条件；若无法形成新变化则合并。'},
+      {round:'台词轮',issue:'解释设备原理的长段台词可能影响观看理解。',action:'改成核对标线、提出限时测试与结果反馈；完整正文写出后再试读。'},
+      {round:'导演与可拍轮',issue:'设备运行与小字档案存在呈现风险。',action:'静态测量替代危险操作；文件信息按具体问题拆分。需场地与专业人员进一步验证。'}
+    ],
+    blockingIssues:'本示例仅完成创作规划和首集片段，尚未完成全剧正文、实际试读与设备专业核验；这些事项阻断“正式定稿”结论。',
+    earliestFailure:'当前最早的待核验点是舞台故障机制：需先由专业人员确认标线、交接与复测逻辑，再细化设备相关台词和场景。',
+    revisionImpact:'任何设备机制修订都需同步首集静态复核、第 6—9 集责任证据链、高潮重做方案、道具与场景清单。人物最终公开错误并合作的方向保持记录。',
+    acceptanceEvidence:'已用规划资料检查目标、关系、伏笔和结局的对应关系；仍需对完整正文执行逐场因果、对白、节奏、亮点和完整性交叉验收。本表为演示记录，不能替代实际审稿。',
+    handoffPackage:['项目总览','人物小传','关系矩阵','分集大纲','信息与伏笔账本','场景道具清单','修订记录','风险核验记录'],
+    rightsAndFacts:'人物、剧场与机构均为独立虚构。舞美职业、设备测试和交接流程需专业资料核验；拍摄地点、音乐、图纸视觉与演员肖像尚未涉及真实授权。',
+    verificationLog:[
+      {item:'舞台设备与交接机制',source:'待咨询舞台机械或舞美专业人员；示例尚未取得实际核验资料。',status:'待核验',action:'先核验静态测量与复核流程，再锁定事故原因和专业台词。'},
+      {item:'目标平台最新要求',source:'拟首发平台为抖音；尚未检索正式发布时适用的最新官方规则。',status:'待核验',action:'定稿与发布前记录官方来源、日期及相关处理。'},
+      {item:'真实场地与素材授权',source:'当前仅创作规划，无真实场地、演员或第三方素材资产。',status:'不适用',action:'进入制作时登记场地、肖像、音乐与素材使用授权。'}
+    ],
+    contentBoundaries:'职业冲突围绕资源、信息与责任，不影射真实单位；不以危险设备操作展示爽点。母亲照护支线避免把病情作为单纯刺激，实际医疗信息如出现需另核验。',
+    unresolved:'全剧正文与试读尚未完成；舞台专业机制、平台最新规则及未来制作素材授权仍需核验。示例不得标注为已通过审核或可直接发布。',
+    finalStatement:'v0.1 创作规划示例。覆盖十二步判断、全剧方向与首集设计，不含完整分集正文、真实市场验证、专业事实确认或发布审批。',
+    finalDeliverables:['创作前置判断','全剧与分集规划','人物与关系','场景与道具','伏笔与钩子','节奏与台词方案','审改与核验记录'],
+    finalVersion:'v0.1 创作规划示例'
+  },
+  checks:Object.fromEntries(window.STEPS.map(step=>[step.id,[]]))
+};
+
+window.KAICHANG_SOURCE = "# 爆款短剧剧本创作规范手册\n\n\u003e 版本：v1.0　适用范围：竖屏短剧、连续短剧、剧情短片、微电影、动画/漫剧、AI 真人短剧、口播解说短剧等一切以\"角色—冲突—兑现\"为核心的剧情类剧本创作。\n\u003e 使用方式：动笔前按\"标准创作流程\"顺序走完全部前置判断；写作中对照各章规则；完稿后用第七部分验收清单逐项复核。本规范只约束**剧本创作**，不含后期分镜、拍摄与视频制作环节。\n\n---\n\n## 目录\n\n- [第一部分　立项与定位](#第一部分立项与定位)\n  - [1. 爆款底层逻辑：观众心理机制](#1-爆款底层逻辑观众心理机制)\n  - [2. 受众定位与画像](#2-受众定位与画像)\n  - [3. 选题与差异化](#3-选题与差异化)\n  - [4. 故事前提压力测试](#4-故事前提压力测试)\n  - [5. 类型定位与类型义务](#5-类型定位与类型义务)\n- [第二部分　人物与关系](#第二部分人物与关系)\n  - [6. 人物引擎与人物弧光](#6-人物引擎与人物弧光)\n  - [7. 人物小传规范](#7-人物小传规范)\n  - [8. 反派与对立力量规范](#8-反派与对立力量规范)\n  - [9. 人物关系张力矩阵](#9-人物关系张力矩阵)\n- [第三部分　结构与因果](#第三部分结构与因果)\n  - [10. 双层剧本结构](#10-双层剧本结构)\n  - [11. 单场戏场景发动机](#11-单场戏场景发动机)\n  - [12. 高频场景功能速查](#12-高频场景功能速查)\n  - [13. 单集闭环与多集连载发动机](#13-单集闭环与多集连载发动机)\n  - [14. 信息差、揭示账本与证据链](#14-信息差揭示账本与证据链)\n- [第四部分　钩子、爽点与反转](#第四部分钩子爽点与反转)\n  - [15. 开场钩子规范](#15-开场钩子规范)\n  - [16. 集尾追更钩子规范](#16-集尾追更钩子规范)\n  - [17. 爽点设计规范](#17-爽点设计规范)\n  - [18. 反转设计规范](#18-反转设计规范)\n- [第五部分　节奏、情绪与台词](#第五部分节奏情绪与台词)\n  - [19. 情绪曲线选型](#19-情绪曲线选型)\n  - [20. 单集节拍强度分布](#20-单集节拍强度分布)\n  - [21. 节奏诊断与失控修复](#21-节奏诊断与失控修复)\n  - [22. 台词基本功](#22-台词基本功)\n  - [23. 金句与传播台词规范](#23-金句与传播台词规范)\n- [第六部分　场景、母题与可拍性](#第六部分场景母题与可拍性)\n  - [24. 场景规模与场景清单](#24-场景规模与场景清单)\n  - [25. 场景四维度适配](#25-场景四维度适配)\n  - [26. 视觉与声音母题](#26-视觉与声音母题)\n  - [27. 可拍性规范红线](#27-可拍性规范红线)\n- [第七部分　格式、改稿与验收](#第七部分格式改稿与验收)\n  - [28. 专业剧本格式规范](#28-专业剧本格式规范)\n  - [29. 单集创作卡](#29-单集创作卡)\n  - [30. 七轮改稿流程](#30-七轮改稿流程)\n  - [31. 完稿验收清单](#31-完稿验收清单)\n  - [32. 合规风险红线](#32-合规风险红线)\n- [附录　标准创作流程与决策总图](#附录标准创作流程与决策总图)\n\n---\n\n# 第一部分　立项与定位\n\n## 1. 爆款底层逻辑：观众心理机制\n\n爆款不是\"点子多\"，而是**每一场戏都在完成一条闭环因果链，并持续向观众兑现情绪承诺**。动笔前先选定一部剧主打哪一组观众心理机制，后续钩子、爽点、结局都为它服务，不要一部剧同时讨好所有观众。\n\n### 1.1 受众心理八大机制\n\n| 机制 | 触发方式 | 对应题材 | 强度 |\n|---|---|---|---|\n| 代偿满足 | 主角完成观众想做但不敢/不能做的事（复仇、辞职、怼老板、逆袭） | 都市逆袭、复仇、职场、重生 | ★★★★★ |\n| 代入认同 | 主角处境和观众相似，观众觉得\"这就是我\"（社畜、宝妈、学生、打工人） | 职场、家庭、校园、社会现实 | ★★★★★ |\n| 优越感/俯视 | 观众知道主角底牌，反派不知道（戏剧反讽）；看反派作死，观众预判其失败 | 爽剧、掉马甲、隐藏身份、智斗 | ★★★★☆ |\n| 情感宣泄 | 主角大哭/大笑/爆发，观众跟着释放现实中压抑的情绪 | 虐心、情感、家庭、励志 | ★★★★☆ |\n| 认知好奇 | 悬念、反转、谜团，观众想知道\"接下来会怎样\"\"真相是什么\" | 悬疑、推理、科幻、高概念 | ★★★★☆ |\n| 社交货币 | 有话题性、有金句、有反转，观众愿意转发或与人讨论 | 社会议题、反转剧、金句剧 | ★★★☆☆ |\n| 审美愉悦 | 画面美、人美、音乐美、意境美 | 治愈、文艺、古风、甜宠 | ★★★☆☆ |\n| 安全感/陪伴 | 固定套路、温暖结局、可爱角色，观众像追老朋友 | 甜宠、日常、治愈、情景喜剧 | ★★★☆☆ |\n\n一部作品不必同时触发多种机制，数量不代表质量；选择与人物、类型承诺和结局一致的最小组合。\n\n### 1.2 机制组合公式\n\n| 组合 | 触发机制 | 效果 | 典型题材 |\n|---|---|---|---|\n| 黄金爽感组合 | 代偿满足 + 代入认同 + 优越感 | 最强爽感 | 都市逆袭、掉马甲、重生复仇 |\n| 情感共鸣组合 | 代入认同 + 情感宣泄 + 安全感 | 最强共鸣 | 家庭伦理、情感治愈、甜宠 |\n| 悬疑追更组合 | 认知好奇 + 优越感 + 社交货币 | 最强追更 | 悬疑推理、反转剧、高概念 |\n| 传播组合 | 社交货币 + 代偿满足 + 认知好奇 | 最强传播 | 社会议题、话题剧、反套路 |\n\n---\n\n## 2. 受众定位与画像\n\n### 2.1 创作前填写受众画像表\n\n| 项目 | 内容 |\n|---|---|\n| 年龄范围 | ________ |\n| 性别 | ________ |\n| 地域 | ________ |\n| 职业/身份 | ________ |\n| 核心痛点/焦虑 | ________ |\n| 核心渴望/需求 | ________ |\n| 情感触发点 | ________ |\n| 日常使用的平台 | ________ |\n| 喜欢看的内容类型 | ________ |\n| 付费意愿 | ________ |\n\n\u003e 画像只用于提出可检验假设；不得根据年龄、性别、地域机械决定角色、冲突强度和结局。涉及最新趋势、平台政策、审核规则、市场偏好时，必须检索可靠来源并记录日期与来源。\n\n### 2.2 参考画像（待结合实际目标人群验证，不作为结论）\n\n| 画像 | 年龄/性别/地域 | 核心痛点 | 核心渴望 | 偏好题材 | 付费意愿 |\n|---|---|---|---|---|---|\n| 下沉市场中年女性 | 35-50 / 女 / 三四线 | 家庭矛盾、婆媳关系、子女教育、被忽视 | 被尊重、被理解、家庭和睦、子女有出息 | 家庭伦理、年代、婆媳、逆袭、爽剧 | 中等 |\n| 一二线城市年轻女性 | 20-35 / 女 / 一二线 | 职场压力、单身焦虑、容貌焦虑、原生家庭、孤独 | 独立、自由、被爱、做自己、财务自由 | 甜宠、女性成长、职场、治愈、悬疑、社会议题 | 高 |\n| 下沉市场中年男性 | 30-50 / 男 / 三四线 | 经济压力、工作辛苦、被看不起、家庭责任、中年危机 | 有钱、有权、被尊重、家庭幸福、出人头地 | 赘婿、战神、首富、逆袭、爽剧、年代 | 中等 |\n| 海外年轻女性（欧美） | 18-35 / 女 / 欧美 | 孤独、焦虑、自我怀疑、人际关系 | 被爱、被理解、做自己、冒险、自由 | 狼人、吸血鬼、黑帮、禁忌之恋、悬疑、女性成长 | 高 |\n\n### 2.3 平台适配假设（历史经验标签，投放前须按平台最新规则核验）\n\n| 平台 | 内容偏好（候选） | 节奏 | 注意事项 |\n|---|---|---|---|\n| 抖音 | 爽剧、甜宠、搞笑、反转 | 通常偏快 | 竖屏常见；字幕、BGM 按项目确认，不默认开启 |\n| 快手 | 家庭伦理、年代、乡土、真实感、爽剧 | 快、真实感强 | 接地气，表演贴近生活 |\n| 小红书 | 甜宠、女性成长、治愈、高颜值、穿搭 | 中等，允许美感 | 画面与人物质感优先 |\n| 视频号 | 家庭伦理、亲情、正能量、怀旧、爽剧 | 中等偏快 | 适合朋友圈分享，基调正向 |\n| B 站 | 悬疑、搞笑、反套路、高概念、二次元 | 中等，允许创意深度 | 允许\"梗\"与脑洞 |\n| TikTok / Reels / YouTube | 按目标市场另行核验 | 按样本验证 | 语言、字幕、音乐、分级按当地规则处理 |\n\n平台只影响比例、展示位和安全区；不能据此擅自改变字幕策略、自动添加热门 BGM 或水印。\n\n### 2.4 出海本土化核验要点（非统一结论）\n\n1. \"赘婿\"\"婆媳\"\"四合院\"\"知青\"等本土概念是否需要保留、解释或转译，逐项判断。\n2. 验证目标受众更关注个人选择、家庭责任还是群体秩序。\n3. 亲密关系表达尺度依据题材、分级和平台规则决定。\n4. 验证目标市场对不完美主角、复杂反派、开放结局的接受度。\n5. 节奏与信息密度按平台和样本验证，不把\"海外\"等同于快节奏或慢节奏。\n\n---\n\n## 3. 选题与差异化\n\n### 3.1 七维基因组合\n\n一部短剧由七个维度组合而成。先固定已锁定的维度，再从其余维度中**至少改变两项**，且变化必须真正影响人物选择、冲突机制、信息差或结局代价。\n\n| 维度 | 可选方向 | 改变它会影响什么 |\n|---|---|---|\n| 世界设定 | 都市 / 古风 / 校园 / 职场 / 家庭 / 年代 / 未来 | 世界规则、社会空间、视觉资源与现实约束 |\n| 呈现形态 | 动画 / 漫剧 / AI 真人 / 数字人 / 口播解说 / 微电影 | 叙述载体、场景颗粒、表演方式与可生成性 |\n| 核心冲突 | 身份错位 / 复仇逆袭 / 时间循环 / 信息差博弈 / 道德困境 / 生存竞赛 / 情感纠葛 / 成长蜕变 | 张力来源与节奏类型 |\n| 人物设定 | 隐忍 / 张扬 / 腹黑 / 呆萌 / 冷面 / 疯批 / 普通人 / 反英雄 | 代入感、金句风格、行为逻辑 |\n| 叙事结构 | 线性 / 倒叙钩子 / 多线并行 / 单元+主线 / 无限流 / 碎片化 | 节奏、悬念机制、信息释放方式 |\n| 情绪基调 | 爽感 / 甜蜜 / 虐心 / 紧张 / 搞笑 / 治愈 / 烧脑 / 燃感 | 观看体验与回报方式 |\n| 反转机制 | 身份 / 动机 / 时间 / 视角 / 规则 / 结局反转 | 惊喜感与回味空间 |\n\n**差异化三步**：① 固定不可变硬约束；② 从剩余维度选至少两项实质变化；③ 检验：第一集钩子能否一句话说清？和基础版核心差异是什么？制作条件能否实现？\n\n### 3.2 变体生成五步\n\n1. **拆解**：把 idea 拆成七维基因，逐项写清当前取值。\n2. **固定**：确定用户事实、主题和必要资产，这些不可被候选创意覆盖。\n3. **替换**：从剩余维度选至少两项变化，变化必须影响策略、因果或结局。\n4. **混搭**：跨维度借用特征（如把\"时间循环\"放进\"都市复仇\"）。\n5. **检验**：差异是什么？钩子能否一句话说清？能否拍出来？\n\n三个高级技巧：**极端化**（把某元素推到极致）、**反向化**（换主角立场或因果方向）、**叠加化**（两个变体叠加，如\"时间循环 + 身份反转\"）。\n\n### 3.3 跨题材混搭三原则\n\n1. **一个为主、一个为辅**：主题材决定主冲突与高潮回报，辅题材只提供设定、情绪或反转机制。\n2. **冲突点就是戏剧点**：两个题材的摩擦之处就是最好的戏剧来源，放大它。\n3. **观众需要锚点**：至少保留一个观众熟悉的题材，不能两个都陌生。\n\n### 3.4 反套路十问（一部剧只取 1–2 个深入）\n\n| # | 问题 | 反套路方向示例 |\n|---|---|---|\n| 1 | 身份反转 | 主角以为自己是大佬其实不是；大佬身份是诅咒；所有人都以为他是大佬其实不是 |\n| 2 | 动机反转 | 复仇实为赎罪；真正原因与表面完全不同；主角是被利用的棋子 |\n| 3 | 视角反转 | 从前半主角视角切到反派视角；反派只是立场不同；反派动机更合理 |\n| 4 | 规则反转 | 主角以为在打破规则其实是规则的一部分；两套规则同时运行 |\n| 5 | 时间反转 | 全片倒叙；发生在死前走马灯里；时间循环 |\n| 6 | 代价反转 | 金手指有可怕代价（失去记忆/情感/重要的人、有使用次数） |\n| 7 | 关系反转 | 恋人其实是亲人；好友是最大敌人；反派是主角的未来/过去 |\n| 8 | 结局反转 | 胜利导致更大灾难；得到的不是真正想要的；胜利是反派设计的 |\n| 9 | 类型反转 | 开头甜宠中段悬疑结尾科幻；表面搞笑内核悲剧；以为真实故事其实是虚构作品 |\n| 10 | 尺度反转 | 活了千年/循环万次；故事封闭在一个空间；主角与全世界为敌 |\n\n---\n\n## 4. 故事前提压力测试\n\n### 4.1 立项一段话\n\n动笔前用一段话回答：\n\n\u003e 一个处于何种缺口中的主角，为了什么可观察目标，在什么时限或压力下，必须对抗怎样的对立力量；如果失败会失去什么；这个过程为什么迫使其面对自己最不愿承认的问题；最终必须做出什么不可逆选择。\n\n### 4.2 六项前提检查\n\n| 检查 | 达标问题 | 失败信号 |\n|---|---|---|\n| 主体 | 谁必须行动 | 换任何人都能完成故事 |\n| 欲望 | 主角具体争取什么 | 只想\"变好\"\"成功\"\"被爱\" |\n| 对立 | 谁也有合理目标和资源 | 对手只等着被打败 |\n| 代价 | 失败和成功分别会失去什么 | 赢了没有代价，输了也无所谓 |\n| 反讽 | 人物最不擅长的事为何偏偏是解法 | 设定和人物互不影响 |\n| 选择 | 高潮为何只能由此前选择造成 | 靠巧合、新设定或外援收尾 |\n\n若一句话卖点只剩世界观、身份标签或反转谜底，没有人物行动，返回选题阶段重选方向。\n\n### 4.3 主题命题\n\n主题不是口号，而是一组会让人物付出代价的对立价值（如\"真相是否永远比关系重要\"\"保护能否成为控制\"）。建立五项：\n\n- `value_a`：主角开场相信的价值及其现实收益。\n- `value_b`：故事不断逼近、但主角抗拒的另一种价值。\n- `counterexample`：证明 A 并非全错、B 也非万能的人物或事件。\n- `climax_choice`：高潮中必须牺牲一部分价值才能完成的选择。\n- `ending_evidence`：结局用行为和后果回答，不由角色总结主题。\n\n---\n\n## 5. 类型定位与类型义务\n\n### 5.1 类型坐标（分维度确定，不要用一个标签承担所有决策）\n\n| 维度 | 示例 | 决定什么 |\n|---|---|---|\n| 呈现形态 | 真人、动画、漫剧、数字人、口播、微电影 | 制作语法与可生成性 |\n| 主类型 | 爱情、喜剧、悬疑、恐怖、动作、家庭 | 观众最核心的情绪承诺 |\n| 子类型 | 甜宠、浪漫喜剧、本格推理、心理惊悚 | 场景与回报机制 |\n| 世界背景 | 都市、校园、古代、未来、末世、架空 | 规则、资源和视觉空间 |\n| 戏剧引擎 | 追查、逃生、竞赛、复仇、关系靠近、任务单元 | 故事如何持续推进 |\n| 叙事结构 | 线性、倒叙、多视角、循环、单元+主线 | 信息释放顺序 |\n| 情绪调性 | 明快、冷峻、荒诞、温柔、压抑 | 表演、节奏与结局余味 |\n| 受众承诺 | 陪伴、宣泄、好奇、恐惧、浪漫、正义回报 | 什么必须兑现 |\n\n混搭必须指定**一个主类型**，由它决定高潮回报；辅助类型只提供压力、场景机制或调性。若爱情+悬疑最终只解释案件、没有完成关系选择，它仍是悬疑，不是爱情悬疑。\n\n### 5.2 十四个类型家族的承诺与义务\n\n| 类型家族 | 核心承诺 | 主角发动机 | 对立机制 | 高潮必须兑现 | 常见失败 |\n|---|---|---|---|---|---|\n| 爱情/甜宠/虐恋 | 看见两人为何靠近、为何不能靠近 | 渴望亲密又保护自我 | 身份、价值、时机、秘密 | 对关系作出有代价的选择 | 只有误会、工业糖精、单方拯救 |\n| 喜剧/黑色喜剧 | 预期被精确打破并不断升级 | 执着于错误目标或方法 | 社会规则与人物盲点 | 最大错误造成最大真相或代价 | 只有梗，没有人物后果 |\n| 家庭/伦理 | 亲密关系中的债、爱与边界 | 想维持家庭又争取自我 | 责任、代际、资源与旧伤 | 重新定义关系边界并展示余波 | 单一恶人、靠哭诉和说教解决 |\n| 职场/商战 | 能力、规则和利益的博弈 | 获得职位、项目、尊严或控制权 | 组织结构、竞争者、利益联盟 | 用已铺垫能力完成不可逆决策 | 行业空心、靠身份开挂 |\n| 校园/青春/成长 | 第一次选择如何塑造自我 | 获得归属、认可或独立 | 同伴规则、家庭期待、自我怀疑 | 主角为真实自我承担代价 | 成年人逻辑套学生、只有恋爱 |\n| 悬疑/推理 | 公平线索最终形成可复盘答案 | 查明事实并修正判断 | 隐瞒者、误导、时间压力 | 真相由行动证明且改变局势 | 突降设定、对手降智、只靠口述 |\n| 犯罪/惊悚 | 危险不断逼近，选择暴露人性 | 逃脱、追捕、掩盖或赎罪 | 制度、罪犯、时间、证据 | 生存结果与道德代价同时落地 | 只有阴暗气氛、暴力无因果 |\n| 恐怖/怪谈 | 规则被触犯后的恐惧与未知 | 活下去、理解或阻止侵入 | 怪物、诅咒、群体禁忌、心理投射 | 恐惧源或人物选择得到回报 | 全靠跳吓、规则临时变化 |\n| 动作/冒险/灾难 | 清晰空间中的目标、障碍和代价 | 抵达、营救、夺取、守住 | 地形、敌人、时间和资源耗损 | 用能力与牺牲完成最终行动 | 动作与人物无关、空间不可读 |\n| 科幻/高概念 | 一个规则如何改变人的选择 | 利用、逃离或修正规则 | 技术制度、悖论、资源限制 | 人物选择回答设定命题 | 设定解释过量、规则万能 |\n| 奇幻/玄幻/仙侠 | 成长、奇观和价值体系的代价 | 获得力量、身份、归属或自由 | 等级、门派、命运、欲望 | 终极能力选择体现人物价值 | 数值升级重复、金手指无代价 |\n| 历史/古装/权谋 | 制度约束下的生存与选择 | 保全、上位、改革、复仇或守义 | 礼法、阶层、联盟和信息差 | 筹码、盟友与代价共同收束 | 现代口号换古装、计谋靠对手蠢 |\n| 治愈/文艺/生活流 | 细节累积后产生理解与余韵 | 修补生活、告别、重新连接 | 时间、遗憾、沉默和现实限制 | 一个克制但不可逆的新行动 | 只有氛围、没有状态变化 |\n| 儿童/合家欢/寓言 | 清晰愿望、想象与可理解后果 | 完成任务并学会合作或责任 | 具体规则、误解、自然障碍 | 行动证明成长，不直接讲道理 | 成人化台词、恐惧过载、说教 |\n\n### 5.3 题材路由（决定冲突与回报）\n\n用户给出的题材词不是完整策略，先选一条主路由、必要时选子路由，合并题材词不得不分主次同时套用。\n\n| 题材路由 | 持续戏剧引擎 | 信息与场景策略 | 高潮/结局义务 | 主要禁区 |\n|---|---|---|---|---|\n| 情感 | 需要靠近，但防御方式彼此伤害；每场改变亲密、信任或边界 | 用动作、物件、错位表达和潜台词累积，不靠连续倾诉 | 角色以有代价的行动选择关系，或清醒地结束关系 | 只靠误会拖延；单方拯救；硬煽情 |\n| 家庭现实 | 日常事务触发权力、责任和边界谈判 | 让钱、房、饭桌、照护、工作等现实事务成为场景动作 | 家庭规则或关系边界被重新定义，并展示余波 | 把一人写成纯恶；靠哭诉、说教或大团圆抹平现实 |\n| 悬疑 | 问题→证据→假设→验证→重释，每轮改变嫌疑或危险 | 公平线索可见、误导有来源、关键答案由行动验证 | 当前核心问题得到可复盘答案，真相改变选择与局势 | 突降设定；口述一切；只留坑不兑现 |\n| 年代古风 | 人物欲望受时代资源、身份制度与公共事件挤压 | 年代用劳动、物资、职业细节；古风用礼制、称谓、文书、空间等级 | 人物在时代或制度约束下作出代价清晰的选择 | 现代价值口号换服装；年代物证失真；权谋只靠对手降智 |\n| 校园职场 | 校园由同伴位置与自我定义推进；职场由目标、筹码、反馈和联盟推进 | 校园重群体场景与私密空间反差；职场重会议、交付、资源与决策后果 | 校园完成一次自我定义；职场用已铺垫能力完成不可逆职业选择 | 学生说成年人黑话；行业空心；把霸凌压榨当成长捷径 |\n| 战争军事 | 明确任务→地形/敌情→资源时间受限→计划受挫→重决策→代价 | 用地图、命令、侦察、通信、补给和空间因果传递信息 | 任务结果、人员代价和人物价值选择同时落地 | 只堆爆炸；战术空间不可读；神化牺牲；虚构冒充史实 |\n| 玄幻奇幻 | 学规则→用能力解决问题→暴露限制→支付代价→价值选择 | 奇观必须承担叙事职责；能力、道具和禁忌先示范再升级 | 主角如何使用或放弃终极力量回答人物命题 | 战力数字替代剧情；规则随时改；金手指无代价 |\n| 科幻 | 人物试用规则→获得收益→发现二阶后果→规则反噬或伦理冲突 | 通过实验、失败和生活后果解释设定，少用百科对白 | 人物选择回答\"技术改变条件后，人还坚持什么\" | 设定万能；术语堆砌；最终靠新增规则解围 |\n| 搞笑 | 明确预期→错误策略→误解升级→后果扩大→回扣 | 角色认真追求目标，笑点来自行为与结果，不替作者讲梗 | 最大笑点同时揭露人物真相、关系变化或现实代价 | 只有网络梗；配角只当捧哏；笑点不改变状态 |\n| 励志成长 | 尝试→反馈→失败→学习/改变策略→更难选择，能力增长可见 | 用训练、工作、竞赛或生活任务呈现进步，保留阶段性失败 | 成果由行动累积；即使未赢，也完成可证明的新选择 | 鸡汤替代过程；贵人包办胜利；用苦难数量冒充成长 |\n| 公益教育 | 具体人物遇到具体障碍→错误选择产生后果→获得帮助/新知识→实践改变 | 知识嵌入冲突、示范和选择；给受影响者主体性；事实须核验 | 人物亲自修正并承担后果，知识自然成为行动方法 | 口号式说教；苦难消费；污名化；虚构数据或绝对化效果 |\n\n### 5.4 混搭检查清单\n\n- **主类型承诺**：观众最后必须获得什么。\n- **辅助类型职责**：只增加哪一种压力、乐趣或信息机制。\n- **共享人物问题**：两种类型如何共同逼迫同一个人物选择。\n- **高潮归属**：最终按哪一种类型完成回报。\n- **剥离测试**：去掉辅助类型后，核心故事是否仍能识别；若不能，重新判断主次。\n\n### 5.5 类型成稿校验\n\n- 开场是否尽快提出该类型真正的问题，而不只是展示背景。\n- 中段是否持续以该类型独特机制升级，而非通用争吵。\n- 配角和场景是否提供不同策略，不只是重复主角信息。\n- 高潮是否兑现主类型承诺，并让人物承担此前累积的代价。\n- 结局余味是否符合已确认调性，同时完成事实与人物后果。\n\n---\n\n# 第二部分　人物与关系\n\n## 6. 人物引擎与人物弧光\n\n### 6.1 主要人物九项引擎\n\n| 字段 | 含义 |\n|---|---|\n| 外在欲望 | 本剧中可观察、可失败的目标，不能只写\"变好、成功、被爱\" |\n| 内在需要 | 人物必须学会、承认或放下的东西 |\n| 错误信念 | 曾经保护人物、如今正在伤害人物的判断 |\n| 创伤/形成事件 | 错误信念为何可信，不用于廉价卖惨 |\n| 优势与阴影 | 同一性格如何既帮助又制造问题 |\n| 秘密 | 一旦公开会改变谁的选择 |\n| 底线 | 人物自称绝不做什么 |\n| 越界选择 | 哪个节点迫使其跨过或重写底线 |\n| 行为签名 | 说话、回避、施压、求助和撒谎的独特方式 |\n\n### 6.2 人物弧光标准\n\n成长弧不是\"从弱变强\"，而是：\n\n\u003e **旧策略在更高压力下失效 → 付出真实代价 → 做出过去不会做的新选择 → 局势改变**\n\n失败信号：事件推进了，人物却还是同一个人；只有换地图，没有内在变化。\n\n### 6.3 主题反讽设计\n\n检查人物最不擅长、最抗拒的事，为何恰恰是解决其困境的唯一解法；让设定与人物互相作用，而不是彼此无关。\n\n---\n\n## 7. 人物小传规范\n\n常规短剧至少覆盖主角、配角、反派三类角色，每类至少一位；剧情不需要某类角色时不得机械添加。每位主要角色按以下颗粒度撰写：\n\n```markdown\n#### [角色名]（主角 / 配角 / 反派）\n\n- **一句话定位**：年龄 + 身份 + 关键人设标签。\n- **外壳**：角色公开呈现的身份标签、说话方式和惯常行为。\n- **内核**：外壳保护的恐惧、脆弱、渴望或价值判断。\n- **执念**：持续驱动选择的创伤、遗憾、承诺或错误信念。\n- **性格**：3-5 个具体性格特质，避免抽象形容词，用行为倾向描述。\n- **动机**：核心动机 + 底层驱动力（欲望/恐惧/执念）。\n- **策略与越界选择**：惯用策略 + 哪个节点采用过去不会使用的新策略。\n- **成长弧线**：开场状态 → 中段动摇/受挫 → 结局蜕变，写清转折触发事件。\n- **视觉方向**：大方向的形象、气质与识别符号。\n- **声音锚点**：年龄/性别表达 + 音高与质感 + 语言/口音 + 语速 + 停顿节奏 + 基准情绪 + 句尾习惯。\n- **关键道具/记忆点**：标志性物件或行为习惯。\n```\n\n---\n\n## 8. 反派与对立力量规范\n\n1. 必须写清**合理性动机**：反派为什么这样做，避免脸谱化。\n2. 爽剧、逆袭和明确善恶对抗题材，写清反派实质失败、代价或惩罚落点。\n3. 微电影、关系戏和社会议题不强制惩罚；应写清对立力量如何被理解、承受、改变、绕过或留下余韵。\n4. 对立力量要有独立目标和资源，不能只是\"等着被打败\"。\n5. 专业领域反派的手段要符合该领域真实规则，不靠对手降智取胜。\n\n---\n\n## 9. 人物关系张力矩阵\n\n### 9.1 每对核心关系登记字段\n\n| 关系 | 双方表面目标 | 双方隐藏需求 | 权力差 | 信息差 | 情感差 | 依赖与筹码 | 开场距离 | 变化节点 | 结尾距离 | 下集压力 |\n|---|---|---|---:|---:|---:|---|---|---|---|---|\n| A ↔ B |  |  | -2~+2 | -2~+2 | -2~+2 |  |  | 场次+事件+选择 |  |  |\n\n- 数值只用于比较变化方向：`-2` 表示前者明显受制或落后，`0` 暂时均衡，`+2` 表示前者明显占优、更知情或更投入。\n- 每次变化必须绑定具体事件、证据、让步、背叛、救助或代价，**禁止无事件自动升温或降温**。\n\n### 9.2 五种主关系模式（选 1 种主模式 + 1 种辅模式）\n\n| 关系模式 | 张力来源 | 设计要点 | 经典组合 |\n|---|---|---|---|\n| 欢喜冤家 | 对抗中的靠近 | 互相看不顺眼但不得不合作；每次对抗让关系更近；嘴上说讨厌身体诚实 | 甜宠/轻喜/职场 |\n| 相爱相杀 | 情感和理性的撕裂 | 深爱但立场对立；见面在\"爱\"与\"杀\"之间摇摆；最痛时刻是不得不伤害对方 | 虐恋/黑帮/悬疑 |\n| 师徒/上下级 | 传承与背叛 | 强者带弱者，弱者成长中质疑强者；张力在要不要超越；超越或背叛是高潮 | 职场/修仙/成长 |\n| 宿敌 | 互相成就的对抗 | 天生对立，只有对方理解自己；每次对抗让双方更强；可同归于尽或惺惺相惜 | 悬疑/犯罪/竞技 |\n| 伪装关系 | 何时暴露 | 假夫妻/假兄弟/假身份；张力来自每次差点暴露；暴露后的关系重建是高潮 | 甜宠/悬疑/身份错位 |\n\n### 9.3 关系升级路径（由具体事件触发，不按集数机械推进）\n\n```text\n陌生 → 认识 → 冲突 → 合作 → 信任 → 亲密 → 裂痕 → 背叛/误解 → 决裂 → 重逢 → 和解/彻底破裂\n```\n\n---\n\n# 第三部分　结构与因果\n\n## 10. 双层剧本结构\n\n### 10.1 两层剧本不可互相替代\n\n1. **项目级完整剧本**：从开端写到最终结局，完整覆盖主线、人物弧、分集/段落因果、主要场景序列、关键行动、核心台词意图、伏笔埋设与回收、高潮兑现和最终状态。禁止只写题材介绍、世界观、人物设定或一句话大纲。\n2. **分集详细剧本**：把当前集细化为可直接进入写作执行的全部场次、动作节点、对白、旁白、声音职责、状态变化和集间承接；不得擅自改变全剧总览的核心因果与结局。\n\n### 10.2 长篇/多集节奏\n\n- 项目级先一次锁定：全部集数的故事走向、人物弧、伏笔账本、最终结局，确认后不由后续分集自行改写。\n- 每次只细化当前集；当前集未完成确认前，不提前批量写后续集详细剧本。\n- 每集完成后对照项目级设定复核人设、因果、节奏、伏笔与结局方向。\n- 当前集未回收的伏笔登记预计回收集数，不因此后集尚未细化而改变已锁定的回收方向。\n\n### 10.3 篇幅口径\n\n- 不设字数上限；长度服务完整主线、清晰因果和可拍细节，禁止用重复描述、空泛氛围或无功能对白凑字数。\n- 项目级总剧本包建议 2000–3000 字，包含故事大纲、人物小传、主要场景、核心道具、音色锚点、全局风格和分集梗概。\n- 每集详细剧本最低有效字数按时长动态计算：`max(120, min(800, 时长秒数 × 4.5))`，四舍五入为整数；低于下限不得进入下一环节。\n- 字数达标不等于内容合格：仍须具备明确主线、人物目标、阻力、行动、反馈、局势变化、高潮和结果。\n- 分集剧本只写本集剧情增量；角色外貌、场景布局、道具基础外观不重复铺陈。\n\n---\n\n## 11. 单场戏场景发动机\n\n### 11.1 每场戏因果闭环\n\n每场戏必须形成：\n\n\u003e **角色目标 → 现实阻力 → 采取策略 → 对方反应或环境反馈 → 局势变化**\n\n场景结束时，至少改变权力关系、人物认知、情感距离、危险程度、目标难度、关键线索或道具归属中的一项。**开场与结尾状态相同、没有新增有效信息的场景必须删除或重写。**\n\n### 11.2 场景卡七步（开写前内部填清）\n\n```text\n入场价值：场景开始时，权力/关系/认知/危险/希望处于什么状态\n即时目标：主行动者现在要让谁做什么\n策略：先用什么具体办法\n反制：对方如何识破、拒绝、转移或加价\n升级：主行动者换什么更冒险的策略\n转折：哪条新信息、行动或代价改变场景方向\n离场价值：至少一项状态发生可观察变化\n余波：谁必须因此在下一场采取行动\n```\n\n### 11.3 对白的语言动作标注\n\n对白场逐轮标注语言动作：**试探、诱导、拖延、羞辱、安抚、交换、威胁、撒谎、拆穿、让步**。相邻台词若策略、信息和关系都没有变化，合并或删除。对白、动作和场面调度只是这场攻防的外在执行，不得先写\"漂亮对白\"再反推剧情用途。\n\n---\n\n## 12. 高频场景功能速查\n\n| 场景功能 | 何时使用 | 核心策略 | 必须改变 | 常见失败 |\n|---|---|---|---|---|\n| 开场钩子场 | 首集、单片开头、阶段转折开头 | 结果先行 / 异常画面 / 冲突开门 / 身份错位 / 倒计时 / 秘密暴露 / 反常行为；第一画面让观众产生具体问题 | 观众知道主问题或关系异常，主角被迫行动 | 旁白介绍身世、早晨起床、走路进场、只炫风格 |\n| 目标建立/任务派发场 | 需要让观众明白主角为何行动 | 目标写成可观察、可失败、可计时；给出资源限制和失败代价 | 主角从\"想\"变成\"必须做\" | 长辈/上司讲设定；目标抽象成成功、成长、被爱 |\n| 对峙/羞辱/压迫场 | 制造愤怒、压力或权力差 | 对手用钱、职位、名声、证据、关系、规则、公开场合施压；主角至少有观察、忍耐、反问、取证或隐藏底牌 | 权力差、名誉、资源、证据或关系位置变化 | 连续几场只是换人羞辱，主角没有策略 |\n| 谈判/交易/逼供场 | 双方都有筹码且不能直接动手 | 每轮台词有要价、交换、试探、威胁、让步或揭底；筹码落到物件、文件、时间、见证人、不可撤销承诺 | 至少一方让出筹码、暴露底牌或改变条件 | 原地吵架、互相解释动机、没有新信息 |\n| 调查/找证据场 | 悬疑、背叛、职场、家庭秘密 | 问题驱动：提出假设→寻找物证→得到线索→先产生错误解释→推向更大问题 | 观众、主角或对手的信息差变化 | 看监控/翻手机就得到答案，调查没有代价 |\n| 反击/爽点兑现场 | 主角从受压转为主动 | 前置压力足够具体；反击出乎意料但有铺垫，命中对手最在乎的资源、身份、关系或规则 | 主角获得阶段回报，同时产生更高价格或新敌意 | 突然亮身份、突然开挂，对手只震惊 |\n| 情感靠近/疏离场 | 爱情、亲情、友情、自我关系 | 用小动作、旧物、照顾、避让、称呼变化、距离变化、答非所问传递真心话 | 亲密、信任、亏欠、边界或防御方式变化 | 连续倾诉、哭诉、解释童年，关系没有外部动作 |\n| 秘密揭示/反转场 | 身份、动机、事实、规则被重释 | 先回收公平线索，再用行动、物件、证人、结果或公开选择揭示；揭示后必须有反应和现实后果 | 旧解释失效，新目标、新危险或新选择出现 | 角色口述真相，揭示后只震惊、没有后果 |\n| 失败/低谷场 | 中段压迫、高潮前最低点 | 旧策略彻底失效，并失去一个真实资源：人、钱、证据、名誉、时间、身体状态或自我认同 | 主角不能回到旧办法，必须改策略或越界 | 只是更惨、哭得更多，没有新选择 |\n| 行动/救援/追逐场 | 任务、危机、灾难、动作类型 | 明确空间目标、障碍、时间限制和资源消耗；动作按\"决策→起势→接触/阻碍→结果→反应\"组织 | 任务条件、人物位置、资源或伤亡风险变化 | 动作热闹但看不清目标，胜负不改变剧情 |\n| 喜剧/误会场 | 搞笑、轻喜、荒诞、反差人物 | 双方依据合理但不完整的信息行动；误会每轮扩大后果，最后回扣人物弱点、规则漏洞或关系变化 | 笑点造成真实麻烦、真相或关系后果 | 只有段子热梗，笑完人物还是原样 |\n| 公共场面/群体围观场 | 婚礼、会议、课堂、直播、审判、宴会 | 利用见证人、规则、座次、麦克风、屏幕、文件、投票或群体反应放大压力；公开信息必须改变私下权力 | 名誉、群体位置、联盟或规则归属变化 | 群众只负责惊呼，公开场合没有制度后果 |\n| 日常/留白/呼吸场 | 治愈、生活流、关系余味 | 沉默要有动作职责：修旧物、收拾房间、倒掉饭菜、改称呼、关灯、留下或带走某物 | 情绪距离、人物认知、物件意义或生活状态变化 | 只有氛围、空镜、慢动作，删掉后剧情不变 |\n| 集尾/片尾场 | 连续剧追更或短片闭环 | 先给当前问题结果和反应；连续剧再用旧目标推翻、证据反噬、关系重排、时间缩短或更痛选择建立下一压力；短片展示新状态和余波 | 当前承诺兑现，下一行动理由或最终余味清楚 | 只让手机响、门打开、人物愣住，既无兑现也无新危机 |\n\n场景策略不能机械平均分配：短剧优先开场钩子、对峙、调查、反击、反转和集尾压力；微电影优先目标建立、情感靠近/疏离、失败低谷、日常留白和片尾余波。\n\n---\n\n## 13. 单集闭环与多集连载发动机\n\n### 13.1 单集必须回答的五个问题\n\n1. 本集向观众承诺解决什么具体问题。\n2. 主角采用的第一策略为何失败。\n3. 哪个选择让代价升级且无法完全回到开场。\n4. 本集实际兑现了什么信息、情感或爽感。\n5. 兑现后的后果如何自然建立下一问题。\n\n集尾钩子不能吞掉本集回报；只把高潮切断、不给结果与反应，属于欠债而不是钩子。\n\n### 13.2 多集连载发动机\n\n```text\n稳定欲望 + 可变案件/任务/关系难题 + 持续对立资源\n+ 每集不可逆代价 + 跨集秘密/关系/成长主线\n```\n\n- 若删除人物成长和跨集主线后，每集只是同一场\"被辱后打脸\"换皮，说明发动机不可持续。\n- 用升级阶梯规划对手资源、主角代价、关系裂痕、规则认知和行动尺度，不只升级反派音量。\n\n### 13.3 多集整体阶段节奏\n\n| 阶段 | 目的 |\n|---|---|\n| 钩子期（开端） | 建立主问题、行动代价和追看理由 |\n| 升级期（前中段） | 主角换策略，对立力量升级 |\n| 转折期（中段） | 旧策略失效，代价或秘密显现 |\n| 反攻期（后中段） | 新策略生效，回收伏笔和阶段承诺 |\n| 收尾期（结尾） | 完成主高潮、角色反应和情感落点 |\n\n---\n\n## 14. 信息差、揭示账本与证据链\n\n### 14.1 信息差账本\n\n悬疑、误会、身份、秘密、规则和计划统一登记：\n\n| 信息 ID | 故事事实 | 观众知道 | 主角知道 | 对手知道 | 公平线索 | 错误解释 | 揭示位置 | 揭示动作 | 后果与回收 |\n|---|---|---|---|---|---|---|---|---|---|\n\n规则：\n\n- 反转必须**重释既有事实**，不是临时添加新事实。\n- 公平线索第一次出现时应自然承担当前场景职责，不能只为将来解谜而显眼摆放。\n- 揭示后必须给角色反应、策略变化和现实后果；只有震惊表情不算完成反转。\n- 观众领先角色产生焦虑或优越感；观众落后角色产生谜团；按类型承诺选择信息位置。\n\n### 14.2 台词证据链\n\n凡是会改变人物判断或剧情走向的身份、指控、承诺、能力、秘密、规则和结论，都要登记：\n\n```text\n台词声明 → 事实来源或前置铺垫 → 可见画面/动作/道具/结果 → 揭示场次 → 对局势的后果\n```\n\n- 不能只让角色说\"他背叛了我\"\"我有证据\"\"我是负责人\"就视为剧情成立；后续必须让观众看见证据，或看见该判断造成的可观察后果。\n- 角色可以撒谎、误判或隐瞒，但剧本要区分\"角色所信\"和\"故事事实\"，并规划公平线索或后续验证。\n- 同一事实重复解释而没有新证据、新策略或新后果时，删除重复台词。\n- 涉及真实品牌、人物、IP、地点或时效事实时，证据链来源必须是用户资料或可靠检索结果；未核实内容只能写成虚构设定、角色观点或待确认项。\n\n### 14.3 伏笔节奏\n\n关键信息遵循\"**埋设 → 发酵 → 揭示 → 后果**\"；人物弧遵循\"**旧策略失效 → 承担代价 → 新选择 → 局势改变**\"。\n\n---\n\n# 第四部分　钩子、爽点与反转\n\n## 15. 开场钩子规范\n\n### 15.1 五类开场机制（选一个主机制，可叠加辅助机制）\n\n| 机制 | 判断条件 | 组合方式 | 避坑 |\n|---|---|---|---|\n| 身份/能力反差 | 主角身份、能力或资源被误判 | 低地位画面 + 高门槛动作 + 他人反应 | 不能只靠旁白宣布身份，必须有不可伪造证据 |\n| 危机/倒计时 | 行动迟疑会产生不可逆损失 | 可见危险 + 被迫选择 + 损失预告 | 倒计时必须影响选择，不只是装饰 |\n| 关系裂缝 | 亲密关系中出现细节矛盾 | 日常亲密动作 + 一个不合理物证 + 被压住的追问 | 细节小而准，不能一开场把真相说完 |\n| 规则异常 | 世界或空间有特殊规则 | 普通人进入规则 + 轻微违反 + 可见代价 | 规则要能反复制造选择，不能只吓一次 |\n| 道德困境 | 两个选择都有损失 | 主角握有解决手段 + 伤害无辜的代价 | 困境必须和主角价值观有关，不是随机难题 |\n\n### 15.2 开场通用公式\n\n```text\n极端处境/极端冲突 + 具体细节 + 身份反差/悬念 = 好钩子\n```\n\n- **极端处境**：怀孕被推下楼梯、入赘被轻视、被裁员、新婚之夜的异常身份。\n- **具体细节**：用具体数字和物件（八个月、三年、三天后、某件信物），比抽象描述更抓人。\n- **身份反差/悬念**：被欺压者其实另有身份；表面平静下藏着秘密。\n\n### 15.3 开场禁区\n\n- 禁止用旁白介绍身世、早晨起床、走路进场、纯风格展示开场。\n- 开场第一画面必须让观众产生**一个具体问题**。\n- 开场窗口按实际时长和平台动态判断；移动端极短内容在首个视觉节拍内给出可感知承诺，不机械卡\"前 3 秒\"。\n- 第 1 集直接继承主机制与核心承诺；后续集可强化、反转或更新变体，但必须说明变体理由以及如何延续项目承诺。\n\n---\n\n## 16. 集尾追更钩子规范\n\n### 16.1 五类钩子\n\n| 钩子类型 | 设计公式 | 示例方向 | 适用 |\n|---|---|---|---|\n| 悬念型 | 抛出观众想知道答案的问题 | \"他摘下口罩的那一刻，全场都傻了\" | 悬疑/身份/高概念 |\n| 危机型 | 主角陷入更大危险，观众想知道怎么破 | \"门被锁死了，煤气正在泄漏\" | 通用 |\n| 反转型 | 最后一秒推翻前面认知 | \"原来一直帮她的人，才是最大的反派\" | 悬疑/反转/智斗 |\n| 情感型 | 关系到临界点，观众想知道选择 | \"他拿出戒指，她的手机响了——是另一个他\" | 甜宠/虐恋/情感 |\n| 信息差型 | 观众知道了角色不知道的秘密 | 观众看到口袋里的录音笔，角色没看到 | 爽剧/智斗/悬疑 |\n\n### 16.2 钩子三原则\n\n1. **具体**：不是\"接下来会发生什么\"，而是\"门被锁了、煤气在泄漏\"——具体危机比抽象悬念更抓人。\n2. **避免机械重复**：连续使用同一类型会降低新鲜感；只在剧情机制确实变化时更换类型。\n3. **必须兑现**：下一集尽早回应上一集问题，并给出必要的角色反应。\n\n### 16.3 不同位置的钩子强度\n\n| 位置 | 目的 |\n|---|---|\n| 首集/首段结尾 | 完成首轮兑现并建立追看理由 |\n| 前期常规集结尾 | 建立主线、关系和信息差 |\n| 前期关键转化点 | 阶段性回报后建立下一问题 |\n| 中段各集结尾 | 维持主线、关系和信息差 |\n| 阶段高潮结尾 | 先完成当前兑现，再阶段性满足并改变下一阶段条件 |\n| 终局结尾 | 有续作时留因果钩子；完结时闭环，完成主题和人物后果 |\n\n---\n\n## 17. 爽点设计规范\n\n### 17.1 四类经典爽点公式\n\n| 类型 | 公式 | 设计步骤 | 避坑 |\n|---|---|---|---|\n| 打脸三连 | 被羞辱 → 隐忍 → 亮身份 → 对方震惊 → 后悔 | 羞辱要具体到能激起愤怒；隐忍有理由（等时机，不是怂）；亮身份卡在最关键时刻；对方走完震惊→不敢相信→后悔→求饶 | 羞辱不够狠后面爽不起来；亮身份太早没有蓄力 |\n| 降维打击 | 对手用 A 手段 → 主角换完全不同维度的 B 手段 → 对手无法理解 | 对手手段在其维度已是最强；主角手段来自对手不知道的维度；反应是\"这是什么\"而非\"你作弊\" | 手段必须前文铺垫，不能突然开挂 |\n| 扮猪吃虎 | 全员以为主角弱 → 关键时刻展现实力 → 围观震惊 | \"扮猪\"要真实；周围轻视要具体；\"吃虎\"选在最被轻视的时刻 | 隐藏过久无阶段回报会损耗耐心；\"吃虎\"太频繁会麻木 |\n| 以退为进 | 主动让步 → 对手得寸进尺 → 亮底牌 → 对手崩溃 | 让步看起来真输了；对手越过底线；底牌有铺垫；对手失去最在乎的东西 | 让步太多被看成怂；底牌无铺垫像开挂 |\n\n### 17.2 爽点节奏规则\n\n- 每集必须有与题材一致的**可观察回报**（爽点、线索、关系靠近、情绪沉淀或规则发现），不强制每集打脸。\n- 采用\"**压力 → 局部回报 → 更高价格 → 主回报**\"结构：不持续压制到最后，也不让主角连续无代价获胜。\n- 阶段性大回报按结构和代价累积安排，不按固定集数打点。\n- 回报后先展示人物和局势后果；连续剧再从既有因果建立下一问题。\n- 非爽感题材把\"回报\"替换为线索、关系靠近、理解、恐惧验证或情绪释放。\n\n### 17.3 爽点常见失败\n\n- 前置压力、选择代价或结果反馈不足，导致爽点不爽。\n- 突然亮身份、突然有钱、突然开挂，对手只震惊、无真实损失。\n- 反击方式与前文能力、证据、规则无关。\n\n---\n\n## 18. 反转设计规范\n\n### 18.1 反转必备四组件\n\n**公平线索 → 错误解释 → 揭示动作 → 现实后果**，缺一不可。只改一句设定、靠新角色突然说明或为反而反，都不算有效反转。\n\n### 18.2 五类反转及适用\n\n| 类型 | 用在什么时候 | 必备组件 | 避坑 |\n|---|---|---|---|\n| 身份重释 | 需要让旧行为获得新意义 | 早期礼仪/知识/避讳 + 错误称谓 + 不可伪造证据 | 不能只靠角色自报家门 |\n| 动机重释 | 主角看似自私、背叛或冷酷 | 反常选择 + 小损失 + 高潮放弃更大利益 | 动机要改变行动评价，而不是补一句苦衷 |\n| 证据方向相反 | 悬疑、复仇、职场反制 | 真实证据 + 错误因果顺序 + 新时间锚点 | 证据必须公平出现，不能结尾才新增 |\n| 胜利即失败 | 爽剧、规则、智斗 | 对手异常放行 + 每次胜利完成隐藏条件 + 主角二次选择 | 失败要产生新行动空间，不能只打击观众 |\n| 关系称谓重释 | 家庭、爱情、治愈、伦理 | 回避称谓 + 私人物件 + 共同选择或旧承诺 | 关系变更必须影响当下选择 |\n\n### 18.3 组合原则\n\n- 每集最多一个主反转，辅反转只服务主反转；短片只保留能改变主选择的反转。\n- 反转前必须允许观众形成错误解释；反转后必须立刻改变目标、关系、风险或代价。\n- 情感题材重\"动机/关系重释\"，悬疑重\"证据/视角重释\"，爽剧重\"失败让渡/胜利即陷阱\"，奇幻科幻重\"规则价格\"。\n- 反转必须可回看：二刷时观众能找到公平线索。\n\n---\n\n# 第五部分　节奏、情绪与台词\n\n## 19. 情绪曲线选型\n\n根据受众和题材选定一条主曲线，全剧服从该曲线的回报节奏。\n\n| 曲线类型 | 适用受众/题材 | 设计要点 |\n|---|---|---|\n| 爽剧型（先抑后扬） | 爽剧受众 | 尽早建立冲突；压力与释放交替；回报逐级升级；连续剧结尾可留钩子；不设固定秒数和比例 |\n| 甜宠型（温暖持续） | 年轻女性、romance、甜宠 | 整体温暖、波动不大；小虐后立刻有更甜补偿；男女主互动细节是核心；不需要大反转，稳定甜感优先 |\n| 悬疑型（持续紧张） | 悬疑受众 | 开头建立谜团；按推理释放公平线索；中段改变判断；结尾兑现当前问题并按需建立更大问题 |\n| 虐心型（持续压抑后爆发） | 女性受众、情感虐恋、BE 美学 | 先建立美好 → 虐度持续升级 → 中段压到最低 → 一次情感爆发；BE/HE 均可，但情感必须真实 |\n| 治愈型（平缓温暖） | 都市青年、疲惫打工人 | 整体平缓温暖；日常小细节传递温暖；允许留白和沉默；结尾给温暖和力量 |\n| 反转型（预期被重释） | 反转与推理受众 | 先建立默认认知；公平线索逐步重释；只设一个主高潮；反转改变人物选择并留下后果 |\n\n---\n\n## 20. 单集节拍强度分布\n\n强度 `1–5`：1 为平静蓄力，5 为全片最高回报。区间为覆盖范围，不是固定剪辑秒点；实际秒点由动作、对白试读、情绪停留和自然切点决定。\n\n### 20.1 约 1 分钟\n\n| 相对区间 | 职责 | 建议强度 | 最低交付 |\n|---|---|---:|---|\n| 0%–12% | 异常、冲突或欲望开场 | 3–4 | 一个具体问题 |\n| 12%–38% | 主角第一策略与阻力 | 2–4 | 对立资源可见 |\n| 38%–68% | 策略失效、代价升级 | 3–4 | 不可回到开场 |\n| 68%–90% | 证据、反击、选择或情感兑现 | 4–5 | 主承诺被兑现 |\n| 90%–100% | 结果反应与余波 | 2–4 | 独立短片闭环；连续剧建立因果钩子 |\n\n### 20.2 约 3 分钟\n\n| 相对区间 | 职责 | 建议强度 | 最低交付 |\n|---|---|---:|---|\n| 0%–8% | 高信息开场 | 3–4 | 主问题或关系异常 |\n| 8%–28% | 目标、规则与第一策略 | 2–3 | 人物为何必须行动 |\n| 28%–50% | 对立反制和局部代价 | 3–4 | 策略变化一次 |\n| 50%–72% | 新信息重释局势 | 3–4 | 公平线索开始回收 |\n| 72%–92% | 主高潮与人物选择 | 4–5 | 回报、代价、对手反应 |\n| 92%–100% | 情绪落点或下一压力 | 2–4 | 让高潮产生后果 |\n\n### 20.3 约 5 分钟\n\n| 相对区间 | 职责 | 建议强度 | 最低交付 |\n|---|---|---:|---|\n| 0%–8% | 情境钩子与缺口 | 2–4 | 类型承诺出现 |\n| 8%–25% | 人物关系、目标和规则 | 2–3 | 选择空间明确 |\n| 25%–45% | 第一轮行动与反制 | 3–4 | 局部胜负和新代价 |\n| 45%–62% | 中点重释或不可逆选择 | 4 | 故事方向改变 |\n| 62%–80% | 后果、最低点、新策略 | 3–4 | 人物不能再用旧办法 |\n| 80%–94% | 高潮行动与主回报 | 4–5 | 类型和人物双兑现 |\n| 94%–100% | 反应、余韵、闭环 | 1–3 | 主题由行动结果显现 |\n\n### 20.4 微节奏规则\n\n短剧微节奏按约 `2–4` 秒一个可见变化组织；变化可以是台词策略、权力位置、证据、反应、动作结果、声音桥或切镜。\"换角度看同一状态\"不算变化。\n\n---\n\n## 21. 节奏诊断与失控修复\n\n### 21.1 六类节奏失控信号\n\n| 规则 | 具体要求 | 检查方法 |\n|---|---|---|\n| 状态持续过久 | 同一状态持续但没有新行动、反馈或信息 | 删除后是否毫无损失；若是则压缩或重写 |\n| 压力与回报失衡 | 只有压制或只有胜利，人物不承担代价 | 回报是否由前文选择和证据累积 |\n| 情绪单调 | 同一种情绪持续且关系、认知没有变化 | 增加策略变化、信息变化或有职责的呼吸段 |\n| 对话空转 | 连续对白没有动作、反应或权力变化 | 标记每轮台词策略，删除无职责对白 |\n| 转折堆叠 | 反转数量很多但缺少前置线索和后果 | 保留一个主高潮，其余服务主高潮 |\n| 场景拖沓 | 场景开尾状态相同，或重复完成相同职责 | 合并场景，或让角色改变策略并承担后果 |\n\n### 21.2 反馈问题与修复\n\n| 失控信号 | 原因 | 修复方法 |\n|---|---|---|\n| 某一时间点观众大量流失 | 该时间点没有信息增量/情绪平 | 插入一个小反转、小爽点或新人物 |\n| 评论说\"太水\" | 对话太多没有推进/场景太长 | 删掉无信息增量对话，长场景拆成多个短场景 |\n| 评论说\"太赶\" | 信息密度太高/情绪没有沉淀 | 在关键情感点加 2–3 秒留白，减少次要信息 |\n| 爽点不够爽 | 前置压力、选择代价或结果反馈不足 | 补足前置阻力、选择成本与对手反应 |\n| 追更率低 | 结尾钩子不够强/钩子没有兑现 | 强化结尾钩子，下一集尽早兑现并保留必要反应 |\n\n---\n\n## 22. 台词基本功\n\n### 22.1 台词职责\n\n- 每句台词先明确说话人的**表面目的、隐藏顾虑、当前策略**；相邻台词形成试探、阻挡、逼迫、反击、让步、揭示或关系变化。\n- 画面已经能直接看到的信息，不再由台词复述。\n- 潜台词通过停顿、动作、视线、距离或答非所问呈现。\n- 承担事实、指控、身份揭示、能力证明的台词，必须在证据链中找到前置来源、可见证据或结果反馈；找不到就改为角色主观判断，或补足证据。\n- 完整短篇最后一句回扣开场冲突、角色选择、核心道具或主题命题；连续剧先完成当前局势变化，再建立下一问题。\n\n### 22.2 台词密度与语速\n\n- 台词不要密集到没有呼吸；关键金句单独成句，留出反应时间。\n- 长台词拆成短句，中间插入动作/反应镜头；少用生僻字、绕口令、外语。\n- 中文普通剧情语速硬上限约 `4` 汉字/秒，快节奏交锋硬上限约 `5` 汉字/秒；超出时拆段、缩短台词、改为画外音或调整时长，不写\"快速说完\"规避。\n- 台词朗读总时长在对应片段内保持合理占比，留出动作与反应空间。\n\n### 22.3 台词三层文本（保留原文时适用）\n\n用户提供的原台词逐字、按原顺序保留；阅读稿仅规范标点、引号和空格；语音/字幕匹配文本再去除标点与不可发音符号。三层文本除标点规范外不得删改、拆句、合句、调序或替换字词。\n\n---\n\n## 23. 金句与传播台词规范\n\n### 23.1 五种金句公式\n\n| 金句类型 | 公式 | 写法要点 | 示例机制 |\n|---|---|---|---|\n| 重复+反转 | 重复对方的话/常识 → 反转 | 先承认对方说的，再用\"但是\"推翻 | \"你说我不配？对，我不配——我不配和你这种人说话。\" |\n| 否定常识+新答案 | 否定公认常识 → 给出新答案 | 先破后立 | \"善良不是软弱，善良是我有能力伤害你，但我选择不。\" |\n| 数字+对比 | 具体数字制造强烈对比 | 数字必须具体，对比要强烈 | \"三年前你踩我一脚，三年后我让你跪三天。\" |\n| 比喻+升华 | 具体画面感比喻 → 升华道理 | 比喻要有画面，不用空泛比喻 | \"人心像镜子，你对它笑它就对你笑——但你砸它，它会碎给你看。\" |\n| 留白+潜台词 | 说的话和想的完全相反 | 表面一层意思，实际另一层，靠语境和表演传递 | \"你走吧。\"（实际意思：别走好吗） |\n\n### 23.2 金句使用五条铁律\n\n1. **符合身份**：大佬说霸气句、文人说哲理句、普通人说朴实句；不是每个角色都说金句。\n2. **放在关键时刻**：情绪最高点、反转时刻、打脸时刻；不在平淡对话里硬塞。\n3. **有重复价值**：检查\"这句话你会不会发给朋友\"，不会就删。\n4. **一部剧 1–2 句核心主题金句**，在关键节点重复出现，每次意义不同。\n5. 金句只是亮点的表达之一，**不能替代人物行为、关系变化和题材机制**；缺乏人物与情境支撑时宁可重写蓄力，不堆哲理口号。\n\n### 23.3 传播句三类功能\n\n| 功能 | 写法 | 使用位置 | 避坑 |\n|---|---|---|---|\n| 选择宣言 | \"我选择什么，因此承担什么\" | 主角主动转向、反击或放手时 | 不能在还没行动前空喊态度 |\n| 关系结算 | \"我们之间真正改变了什么\" | 决裂、和解、告别、认亲后 | 不要把复杂关系压成鸡汤 |\n| 真相重命名 | \"过去被误读的事现在叫什么\" | 证据揭示或反转兑现后 | 不能替代证据，只能收束证据 |\n\n**句子检查**：是否只有这个角色会这样说，换人说会不成立？是否含有具体对象、旧物、证据、选择或代价？是否短、准、有动作余温；删掉不影响剧情时就删。\n\n商业对话型短剧每集至少一句可传播台词，优先落在高潮、反转、选择或关系决裂处；无对白作品、低龄内容、自然主义克制段落可用视觉/声音母题等价承担。\n\n---\n\n# 第六部分　场景、母题与可拍性\n\n## 24. 场景规模与场景清单\n\n### 24.1 规模推导\n\n1. 先逐场梳理地点变化、时间跳跃、人物出入、行动阻力和证据位置，合并空间功能相同且不影响因果的地点。\n2. 单场短片、密室戏、独白或同一空间内成立的完整冲突链，可以只登记 1 个核心场景，不为凑数机械加场。\n3. 短篇通常使用 1–4 个核心场景；长篇可按跨集剧情使用 1–8 个或更多场景。超出常用范围时，逐个说明新增场景承担的独立剧情功能，以及为什么不能由既有场景完成。\n\n### 24.2 场景清单字段\n\n| 场景编号 | 场景名称 | 场景类型/功能 | 空间概念方向 | 情绪氛围基调 | 叙事性关键陈设 | 常见时间/内外景 |\n|---|---|---|---|---|---|---|\n| SCN001 |  | 主场景/次场景/回忆/梦境 |  |  |  | 日 内 / 夜 外 / … |\n| SCN002 |  |  |  |  |  |  |\n\n- 场景名称 2–6 字，与剧本正文场次表头一字不差。\n- 剧本每场表头中的场景名**必须严格取自清单**；剧情确需新增场景时，先回填清单并说明必要性，再继续写作。\n\n## 25. 场景四维度适配\n\n拿到题材先从四个维度分析故事发生的场景，再选策略。\n\n| 维度 | 选项 | 策略选择 |\n|---|---|---|\n| 开放度 | 封闭（房间/车/岛）vs 开放（城市/江湖/星际） | 封闭→对话驱动/密室悬疑/心理博弈；开放→冒险/群像/升级流 |\n| 熟悉度 | 熟悉（办公室/家/学校）vs 陌生（古代/未来/外星） | 熟悉→话题痛点/日常治愈/身份错位；陌生→世界观构建/冒险/高概念 |\n| 压力值 | 高压（战争/灾难/生死）vs 低压（日常/假期/退休） | 高压→极端人性/生存竞赛/倒计时；低压→治愈/情感/慢热/留白 |\n| 时间感 | 线性 vs 循环 vs 碎片化 | 线性→成长/传记/升级流；循环→高概念/悬疑/反复试错；碎片化→文艺/悬疑/罗生门 |\n\n### 场景策略速查\n\n| 场景组合 | 首选策略 | 次选策略 | 避免 |\n|---|---|---|---|\n| 封闭+熟悉+高压+线性 | 对话驱动、密室悬疑 | 情感留白 | 冒险、群像 |\n| 封闭+熟悉+低压+线性 | 日常治愈、轻喜 | 情感留白 | 升级流、冒险 |\n| 封闭+陌生+高压+线性 | 高概念、生存竞赛 | 密室悬疑 | 日常治愈 |\n| 开放+熟悉+高压+线性 | 话题痛点、都市悬疑 | 身份错位 | 慢热日常 |\n| 开放+熟悉+低压+线性 | 日常治愈、轻喜 | 话题痛点 | 极端高压 |\n| 开放+陌生+高压+线性 | 冒险、升级流、群像 | 高概念 | 日常治愈 |\n| 开放+陌生+低压+线性 | 世界观探索、慢热 | 高概念 | 快节奏爽剧 |\n| 任意+任意+任意+循环 | 高概念、时间循环 | 悬疑、恋爱 | 纯日常（循环需要变化） |\n| 任意+任意+任意+碎片化 | 文艺、悬疑、罗生门 | 情感留白 | 爽剧、升级流（需要清晰） |\n\n---\n\n## 26. 视觉与声音母题\n\n- 剧本可登记道具、环境、服装、色彩、动作、台词和声音母题；**每次出现都必须改变状态或意义**。\n- 视觉母题（物件、颜色、构图、动作）至少三次变奏，每次承担不同剧情含义；重复摆设但不变化不算母题。\n- 声音母题（台词、环境声、静默、声音桥）反复改变意义；声音进入/退出与人物认知或权力变化同步。\n- 母题不能为了风格而存在：删掉后若剧情不变，说明该母题无职责。\n\n---\n\n## 27. 可拍性规范红线\n\n### 27.1 七类生成/表演限制与剧本应对\n\n| 限制 | 剧本阶段应对策略 |\n|---|---|\n| 微表情有限 | 关键意义不能只依赖细微表情；用动作、距离、视线、道具状态和结果反馈补足；微表情只能加强情绪，不能单独承担反转 |\n| 复杂动作易失真 | 动作拆成\"起势→接触→受力→结果→反应\"的短动作链；中间过程无法稳定呈现时用声音或剪辑省略，禁止默认改成慢动作填时长 |\n| 多人互动易错位 | 明确当前主行动者、关系轴线和每个主体反馈；按单人策略、对手反应与群体后果拆分，不机械规定固定人数 |\n| 口型同步有误差 | 台词不密集；关键金句单独成句；少用生僻字、绕口令、外语；长台词拆短句，中间插入动作/反应镜头 |\n| 场景/道具一致性差 | 核心道具和场景在项目设定中精确锁定；分集只引用稳定设定和当前状态，补本场动作与位置增量 |\n| 留白可能退化为静止 | 留白仍要有呼吸、视线、手部、道具、环境光或环境声变化，并在结束时改变认知、关系或情绪距离 |\n| 渲染/质感不足 | 从既定风格出发设计主光方向、明暗层次、材质和色彩关系；不为掩盖质感把全片统一改成暗调 |\n\n### 27.2 每场写完后的可拍性自查\n\n- [ ] 是否多主体同时执行关键动作？→ 明确主行动者并拆分策略与反应。\n- [ ] 是否有复杂动作（打斗/舞蹈/跑酷）？→ 拆成短动作链，逐段明确空间与结果。\n- [ ] 留白是否没有任何可观察变化？→ 加入呼吸、道具、光线或环境声变化。\n- [ ] 台词是否密集到没有呼吸？→ 拆短句，插入动作/反应。\n- [ ] 核心道具/场景描述是否模糊？→ 精确描述颜色、材质、布局。\n- [ ] 是否依赖微妙表情传递关键信息？→ 改用动作、台词、旁白或特写证据。\n\n---\n\n# 第七部分　格式、改稿与验收\n\n## 28. 专业剧本格式规范\n\n完整剧本采用**分集分场专业格式**，让一场戏对应一段可执行内容；不再使用\"章节 + 百字梗概\"的概要式写法作为最终剧本形态。\n\n### 28.1 剧本头（每部剧本开头一次）\n\n```markdown\n《[剧本标题]》\n\n类型：[短篇短剧 / 微电影 / 剧情短片 / 动画短片 / 广告剧情 / 长篇短剧]（长篇注明总集数）\n\n风格：[可执行的光线、色彩、构图、材质、节奏机制；不写\"电影感\"\"高级感\"等空话]\n\n标签：[题材关键词 + 情感关键词，例如\"豪门联姻 + 先婚后爱 + 救赎\"]\n\n人设：[一句话高浓缩人设对撞，例如\"年轻洒脱活泼女 × 成熟稳重古板男\"]\n\n单集时长：[X 分钟]  |  剧作基调：[三幕式 / 短视频钩子驱动]\n```\n\n### 28.2 分集与分场格式\n\n- **分集标题**：`第X集`，独占一行，不带集名（集名可写在分集梗概里，正文用集号）。\n- **场次编号**：`X-Y`，X 为集号、Y 为该集内场次序号（从 1 起）。\n- **场景表头**：`场次编号 场景名 [日/夜] [内/外景]`，例如 `1-1 茶室 日 内`。场景名必须与场景清单一字不差。\n- **人物**：单独一行列出该场人物；画外音使用\"角色名+VO\"，如 `白父VO`。\n- **动作提示**：以三角形 `△` 起首，只描述人物可见动作、空间关系、道具状态和结果；**客观、可拍摄，不写心理活动，不预设景别、机位、焦段或运镜**。\n- **对白**：`角色名：带规范标点的可读台词`，例如 `白清枞：盲婚哑嫁，你也能接受？`。\n- **旁白/画外音**：`角色名VO: 内容`。\n- **内心独白**：`角色名OS: 内容`，只在无法由动作、关系或可见证据表达且确有叙事价值时使用；画面人物不做对应口型。\n- 时间跳跃、章节转换可用短黑屏、暗场、环境空镜、物件特写或声音先行；需要显示时间地点时写明上屏文字内容。\n- 用户可见剧本只用自然语言动作与表演描述情绪变化，不写内部节拍元数据。\n- **场次结束**：空一行进入下一场次。\n\n### 28.3 分场格式样例\n\n```markdown\n《最后一封信》\n\n类型：微电影（1 集）\n风格：都市真人写实\n标签：都市治愈 + 父子和解 + 遗物开启\n人设：情绪克制的都市白领儿子 × 一辈子沉默的老式父亲\n单集时长：3 分钟  |  剧作基调：微电影三幕式\n\n第一集\n\n1-1 旧公寓门口 日 外\n\n人物：林远\n\n△林远背对门内，右手推开吱呀作响的木门。尘埃在门缝斜光中缓缓浮动。\n\n△林远停在门框中央三秒，没有立即迈步进去。\n\n林远VO：父亲走后的第七天，我第一次踏进这里。\n\n1-2 旧公寓客厅 日 内\n\n人物：林远\n\n△林远缓缓走进客厅，视线扫过书架上父亲的旧照片，眉头轻蹙。\n\n△林远走到书架前，右手抬起，指尖轻抚玻璃相框，停在父亲肩膀上。\n\n林远VO：三年了，我第一次听见他这么小声地说话。\n```\n\n### 28.4 长篇分集大纲附表（超过 10 集必备）\n\n```markdown\n| 集号 | 集名 | 核心事件 | 情绪节拍 | 关键伏笔/回收 |\n|---|---|---|---|---|\n| 第1集 |  |  | 开场钩子 |  |\n| 第2集 |  |  | 冲突展开 |  |\n```\n\n### 28.5 单集内部结构\n\n章节数量由总时长、策略变化、场景跨度、关系转折和信息揭示动态决定，不设固定数量；每章必须承担独立职责并改变剧情状态，删除后不影响主线的章节合并或重写。\n\n- **微电影三幕式**：建立情感缺口与钩子 → 事件和冲突迫使主角改变 → 高潮选择、反应与落点。\n- **短视频钩子驱动**：快速建立问题 → 压力升级与策略变化 → 身份、能力或事实兑现 → 当前冲突收束。\n\n---\n\n## 29. 单集创作卡\n\n写每集前填写一张创作卡（内部设计与复核，不必机械显示在剧本正文中）：\n\n| 字段 | 必须回答 |\n|---|---|\n| 核心戏剧问题 | 主角这一集必须解决或推进什么 |\n| 故事引擎 | 欲望、阻力、失败代价、不可逆选择和本集兑现如何持续制造行动 |\n| 开场状态与钩子 | 初始局势、第一可见承诺、具体异常或冲突、升级触发、兑现或悬念延续位置 |\n| 主角目标、时限与代价 | 主角主动争取什么，失败会失去什么 |\n| 对立目标与资源 | 谁或什么形成阻力，为什么阻止主角 |\n| 信息差与证据 | 观众、主角、对手各知道什么，公平线索在哪里 |\n| 策略与权力变化 | 旧策略如何失效，新策略如何改变局势 |\n| 情绪推进与回报 | 压力、关系或认知如何变化，最终兑现什么情绪 |\n| 人物外壳、内核与执念 | 公开形象保护什么恐惧或渴望，什么信念驱动重复选择 |\n| 母题与视听意图 | 关键道具、动作、色彩和声音如何改变意义 |\n| 高潮、结果与下一问题 | 当前问题如何回答，角色如何反应；连续剧再建立下一问题 |\n| 可传播台词或等价母题 | 放在高潮或反转位置，写清由哪个情境、选择和代价支撑 |\n| 可拍性风险 | 复杂动作、多人同框、微表情、长台词、场景和道具风险及处理方式 |\n\n填不出目标、阻力、策略、反馈、变化或证据链时，不得用氛围、金句、镜头效果或新增设定代替剧情。\n\n---\n\n## 30. 七轮改稿流程\n\n初稿完成后**按顺序**执行，前一轮有阻断问题时不提前润色后一轮；每轮只解决一种问题并记录修改依据。\n\n1. **前提轮**：卖点、主角、代价、反讽和不可逆选择是否成立。\n2. **结构轮**：因果、升级、伏笔、高潮和结局是否由前文造成。\n3. **人物轮**：每次行动是否符合欲望、错误信念、资源和代价。\n4. **关系轮**：核心关系是否因具体事件持续变化，关系矩阵是否有证据。\n5. **场景轮**：每场的策略、反制、转折和离场价值是否完整。\n6. **台词轮**：声音区分、语言策略、潜台词、可表演性和传播句是否成立。\n7. **导演与可拍轮**：关键信息能否被动作、空间、声音和可生成画面表达。\n\n每轮输出\"阻断问题、证据位置、最早失效点、修订动作、连带影响\"，从最早失效点修改，避免只补后文解释。\n\n---\n\n## 31. 完稿验收清单\n\n交付前通读全文，逐项复核；任一项不达标即回到对应环节修订。\n\n| 维度 | 达标标准 | 失败处理 |\n|---|---|---|\n| 因果 | 每场有目标、阻力、策略、反馈和状态变化 | 删除、合并或重写最早失效场次 |\n| 钩子与兑现 | 钩子服务主线，有明确兑现位置和后果 | 补兑现或删除无关刺激 |\n| 人物 | 主角主动选择并承担代价，对立力量有独立目标和资源 | 重写动机、策略或关系变化 |\n| 信息与证据 | 关键事实、身份、能力和反转均有来源、公平线索与可见后果 | 补证据或改为角色主观判断 |\n| 台词与声音 | 每句符合身份和策略，原文可追溯，时长可读完，人声类型明确 | 保留原文并调整分句、动作或时长 |\n| 关系张力 | 每对核心关系的权力差、信息差、情感差有场次证据并发生有效变化 | 回写关系矩阵，重写无攻防或无变化场次 |\n| 亮点与可传播点 | 每集主要亮点具备铺垫、兑现、状态变化、形态表达和高潮后余震；商业对话型台词由高潮/反转及代价支撑 | 删除伪亮点和口号式金句，回到题材发动机、人物选择与亮点账本重写 |\n| 节奏与情绪 | 持续产生行动、反馈、关系、认知或情绪变化，留白也有职责 | 压缩空转段落或补有效变化 |\n| 完整性 | 当前范围有开端、推进、高潮、结果和角色反应 | 不交付提纲、占位符或停在高潮的半成品 |\n| 可拍性 | 主行动者清晰；复杂动作可拆；关键信息不只依赖微表情；场景道具可锁定 | 简化动作、拆分人物、补可见证据或登记下游风险 |\n| 跨集一致性 | 人物弧、伏笔、状态和集间承接与全局设定一致 | 修订权威上游并使受影响下游失效 |\n| 交付完整性 | 总览、分集正文、场景清单、关系与设定相互一致 | 补齐产物并重新校验 |\n\n### 亮点成立的附加标准\n\n- 亮点要绑定具体场面、证据、声音或反应镜头，不能写成\"加强氛围\"。\n- 同一项目连续两个主要亮点不能只更换人物或道具而沿用同一机制；重复必须承担升级或回扣职责。\n- 主亮点和辅助亮点尽量来自不同维度。\n- 每个高潮先问\"人物作了什么不可逆选择\"，再问\"如何制造传播感\"；只剩围观震惊、反派跪求或旁白总结时，回到人物与因果层重写。\n- 亮点不能全部压在结尾：前段建立可识别签名，中段至少一次变奏或升级，高潮完成最大兑现，结尾展示余震或回收。\n\n---\n\n## 32. 合规风险红线\n\n平台规则和法律要求会变化；创作阶段先识别风险，实际发布前再依据目标平台最新官方规则核验。本章不是法律意见或审核穷尽清单。\n\n| 红线类型 | 容易踩的内容 | 规避方法 |\n|---|---|---|\n| 政治与公共事件 | 未核实陈述、冒充新闻、影射真实人物或事件 | 核实事实、来源与授权；虚构组织清楚标明虚构，不与真实对象混淆 |\n| 暴力血腥 | 可模仿的伤害方法、猎奇伤口、虐杀或酷刑细节 | 只保留剧情必要信息，避免操作性细节和美化；按目标平台分级与政策处理 |\n| 性与性暴力 | 露骨性内容、缺乏同意、把性暴力当刺激装饰 | 保持叙事必要性、尊重同意与受害者，不呈现可模仿细节；按受众年龄和平台规则处理 |\n| 宗教、民俗与超自然 | 将现实群体污名化，或把虚构设定伪装成真实结论 | 明确世界观与虚构边界，尊重真实文化；需要事实判断时检索可靠来源 |\n| 行为后果 | 把伤害、欺骗、违法或歧视包装成无需代价的成功捷径 | 展示行为对人物和关系的真实后果；结局不必统一惩罚或说教 |\n| 真实人物/品牌 | 未核实陈述、仿冒、诽谤、未经授权使用身份或标识 | 核实事实与授权；虚构设定必须真正独立，不用近似名称规避责任 |\n| 未成年人 | 性化、剥削、过度暴力或不适龄内容 | 采用年龄适宜表达，避免性化和伤害细节，优先保护未成年人权益 |\n| 毒品/赌博 | 可操作方法、招募引流或美化获利 | 不提供操作性细节，不鼓励、不美化，展示现实风险和后果 |\n| 自杀/自残 | 方法细节、浪漫化、鼓励或模仿性表达 | 不描述方法，不美化；聚焦求助、支持、恢复及其对周围人的影响 |\n\n**通用原则**：\n\n1. 高风险内容不提供可模仿的详细方法，不美化伤害，并保持叙事必要性。\n2. 真实人物、品牌、地点、事件和平台政策必须核实；需要授权时先取得授权。\n3. 角色可以灰度、失败或违法，但故事要清楚展示行为后果。\n4. 结局服从主题与人物选择，不强制 HE、大团圆或\"坏人必须受惩罚\"；平台有明确要求时按最新规则处理。\n5. 不确定时标记待核实，不能靠改名、影射或模糊表达规避核验。\n\n---\n\n# 附录　标准创作流程与决策总图\n\n## A. 推荐写作顺序\n\n```text\n1. 明确受众画像与目标平台，选定主心理机制组合\n2. 七维基因选题，至少差异化两个维度；确定主类型 + 辅助类型职责\n3. 完成故事前提六项压力测试与主题命题\n4. 建立人物九项引擎、人物小传与关系张力矩阵\n5. 锁定全局主线、人物弧、伏笔账本与最终结局（多集项目先完成总览）\n6. 登记场景清单与核心道具、母题\n7. 逐集填写单集创作卡，按单场场景发动机写分场剧本\n8. 布置开场钩子、集尾钩子、爽点与反转，登记铺垫与兑现位置\n9. 选定情绪曲线，按节拍分布调整节奏强度\n10. 打磨台词与传播句，完成可拍性自查\n11. 执行七轮改稿，按完稿验收清单逐项复核\n12. 合规风险核验后定稿\n```\n\n## B. 一句话核心准则\n\n\u003e **每场戏都要有目标、阻力、策略、反馈和可观察的变化；每个钩子都要有兑现；每个爽点都要有前文蓄力；每个反转都要有公平线索；每个高潮都要由人物此前的选择和代价造成。**\n\n## C. 常见失败速查表\n\n| 现象 | 根因 | 回到规范章节 |\n|---|---|---|\n| 点子普通、与同类剧雷同 | 七维基因未做实质差异化 | 第 3 章 |\n| 主角全程被动、被推着走 | 外在欲望与主动选择缺失 | 第 6 章、第 11 章 |\n| 反派脸谱化、只为挨打 | 反派缺独立动机与资源 | 第 8 章 |\n| 看两集记不住人物 | 行为签名、关系事件触发不足 | 第 6 章、第 9 章 |\n| 某场戏删掉不影响剧情 | 场景无攻防、无离场变化 | 第 11 章、第 12 章 |\n| 反转突兀、观众不买账 | 缺公平线索与现实后果 | 第 14 章、第 18 章 |\n| 爽感不足 | 前置压力、代价或对手反应不够 | 第 17 章 |\n| 观众中途流失 | 该节点无信息增量或情绪平 | 第 21 章 |\n| 追更率低 | 集尾钩子弱或未兑现 | 第 16 章 |\n| 金句悬浮、不像角色说的 | 脱离身份、策略与情境 | 第 23 章 |\n| 场景道具前后不一致 | 设定未锁定、状态未登记 | 第 24 章、第 27 章 |\n| 结局靠巧合或新增设定解围 | 高潮未由前文选择造成 | 第 4 章、第 31 章 |\n\n---\n\n*本规范为剧本创作内部对照手册；实际拍摄、分镜、视频生成与后期制作规则另按相应制作规范执行。*\n";
+</script>
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+/* 开场 · browser-local writing workspace. No account data or network services. */
+(() => {
+  'use strict';
+  const STEPS = window.STEPS;
+  const STORAGE_KEY = 'kaichang-studio:v1';
+  const $ = (s, root = document) => root.querySelector(s);
+  const $$ = (s, root = document) => [...root.querySelectorAll(s)];
+  const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const uid = () => globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const clone = v => JSON.parse(JSON.stringify(v));
+  const paths = {
+    arrow: '<path d="M5 12h14m-5-5 5 5-5 5"/>', check: '<path d="m5 12 4 4 10-10"/>', book: '<path d="M12 5c-3-2-6-2-9-1v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-3-1-6-1-9 1Zm0 0v15"/>',
+    download: '<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>', file: '<path d="M14 2H5v20h14V7l-5-5Zm0 0v6h5M8 12h8m-8 4h8"/>', plus: '<path d="M12 5v14M5 12h14"/>', trash: '<path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7m4-7v7"/>', lock: '<rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V6a4 4 0 0 1 8 0v4"/>', spark: '<path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z"/>', upload: '<path d="M12 16V3m-5 5 5-5 5 5M4 16v5h16v-5"/>', pen: '<path d="m15 5 4 4M3 21l5-1L21 7a2.8 2.8 0 0 0-4-4L4 16l-1 5Z"/>', chevron: '<path d="m9 5 7 7-7 7"/>'
+  };
+  const icon = (name, cls = '') => `<svg class="icon ${cls}" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || paths.file}</svg>`;
+  if (!Array.isArray(STEPS) || STEPS.length !== 12) { document.body.innerHTML = '<p>创作流程加载失败，请刷新页面。</p>'; return; }
+  const fieldsById = Object.fromEntries(STEPS.flatMap(s => s.fields.map(f => [f.id, f])));
+  let storageWorks = true;
+  let store;
+  function newProject(name = '未命名剧本') { return { id: uid(), name, values: {}, checks: {}, completed: [], activeStep: 0, createdAt: Date.now(), updatedAt: Date.now(), isDemo: false }; }
+  function cleanProject(raw) {
+    if (!raw || typeof raw !== 'object' || !raw.values || typeof raw.values !== 'object') throw new Error('文件中没有有效的创作档案');
+    const p = newProject(String(raw.name || '导入的剧本').slice(0, 180));
+    p.isDemo = !!raw.isDemo;
+    p.createdAt = Number.isFinite(raw.createdAt) ? raw.createdAt : Date.now();
+    for (const [id, f] of Object.entries(fieldsById)) {
+      const v = raw.values[id];
+      if (f.type === 'chips') p.values[id] = Array.isArray(v) ? v.filter(x => f.options.includes(x)).slice(0, f.maxSelected || f.options.length) : [];
+      else if (f.type === 'repeater') p.values[id] = Array.isArray(v) ? v.slice(0, 100).map(row => Object.fromEntries(f.columns.map(c => [c.id, String(row?.[c.id] || '').slice(0, 20000)]))) : [];
+      else p.values[id] = typeof v === 'string' ? v.slice(0, 50000) : '';
+    }
+    p.checks = Object.fromEntries(STEPS.map(s => [s.id, Array.isArray(raw.checks?.[s.id]) ? raw.checks[s.id].filter(c => s.checks.some(x => x.id === c)) : []]));
+    for (const s of STEPS) {
+      if (raw.completed?.includes(s.id) && stepValid(s, p) && s.checks.every(c => p.checks[s.id].includes(c.id))) p.completed.push(s.id);
+      else break;
+    }
+    p.activeStep = Math.max(0, Math.min(Math.floor(Number(raw.activeStep) || 0), p.completed.length, 11));
+    return p;
+  }
+  try {
+    const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+    if (raw?.projects?.length) {
+      store = { projects: raw.projects.slice(0, 30).map(p => { const clean = cleanProject(p); clean.id = typeof p.id === 'string' ? p.id : clean.id; return clean; }), currentId: raw.currentId, bannerDismissed: !!raw.bannerDismissed };
+      if (!store.projects.some(p => p.id === store.currentId)) store.currentId = store.projects[0].id;
+    }
+  } catch { storageWorks = false; }
+  if (!store) { const p = newProject(); store = { projects: [p], currentId: p.id, bannerDismissed: false }; }
+  let p = store.projects.find(p => p.id === store.currentId);
+  let current = p.activeStep;
+  let attempted = false;
+  let toastTimer;
+  let sourceText = window.KAICHANG_SOURCE || null;
+  let dialogReturnFocus = null;
+  function save() {
+    p.updatedAt = Date.now(); p.activeStep = current;
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(store)); storageWorks = true; } catch { storageWorks = false; }
+    $('#saveState').classList.toggle('error', !storageWorks);
+    $('#saveState').innerHTML = `<span class="status-dot"></span>${storageWorks ? '已保存至本机' : '暂未保存，请导出备份'}`;
+  }
+  function toast(message) { $('#toast').textContent = message; $('#toast').classList.add('show'); clearTimeout(toastTimer); if ($('#appDialog').open) { let feedback = $('.dialog-feedback', $('#appDialog')); if (!feedback) { feedback = document.createElement('div'); feedback.className = 'dialog-feedback'; feedback.setAttribute('role','status'); $('#appDialog .modal-body').prepend(feedback); } feedback.textContent = message; } toastTimer = setTimeout(() => $('#toast').classList.remove('show'), 3600); }
+  function present(value) { return typeof value === 'string' && value.trim().length > 0; }
+  function fieldValid(f, project = p) {
+    if (!f.required) return true;
+    const v = project.values[f.id];
+    if (f.type === 'chips') return Array.isArray(v) && v.length >= (f.minSelected || 1) && (!f.maxSelected || v.length <= f.maxSelected);
+    if (f.type === 'repeater') return Array.isArray(v) && v.length >= (f.minRows || 1) && v.every(row => f.columns.every(c => c.required === false || present(row[c.id])));
+    return present(v) && (f.type !== 'select' || !f.options?.length || f.options.includes(v));
+  }
+  function stepValid(step, project = p) { return step.fields.every(f => fieldValid(f, project)); }
+  function initialRows(f) { return Array.from({length:f.minRows || 1}, () => Object.fromEntries(f.columns.map(c => [c.id, '']))); }
+  function checkedCount(step) { return step.checks.filter(c => p.checks[step.id]?.includes(c.id)).length; }
+  function invalidateFrom(index, notify = true) {
+    const hadDone = p.completed.some(id => STEPS.findIndex(s => s.id === id) >= index);
+    p.completed = p.completed.filter(id => STEPS.findIndex(s => s.id === id) < index);
+    STEPS.slice(index).forEach(s => { p.checks[s.id] = []; });
+    if (hadDone && notify) toast('前置内容已修改，后续确认需重新复核；填写内容已保留。');
+  }
+  function changed() {
+    invalidateFrom(current);
+    $$('#stepReview input').forEach(el => { el.checked = false; el.closest('.check-row').classList.remove('checked'); });
+    save(); renderProgress(); renderContext(); refreshValidation();
+  }
+  function renderNav() {
+    let html = '';
+    const groups = [['立项判断', 0, 6], ['创作设计', 6, 10], ['审改交付', 10, 12]];
+    for (const [label, start, end] of groups) {
+      html += `<div class="nav-group"><div class="nav-group-label">${label}</div>`;
+      for (let i = start; i < end; i++) {
+        const s = STEPS[i], complete = p.completed.includes(s.id), locked = i > p.completed.length;
+        html += `<button class="nav-step ${i === current ? 'active' : ''} ${complete ? 'complete' : ''} ${locked ? 'locked' : ''}" data-step="${i}" ${i === current ? 'aria-current="step"' : ''} aria-label="第${i + 1}步 ${esc(s.short)}${locked ? '，尚未解锁' : ''}" aria-disabled="${locked}"><span class="step-number">${complete ? icon('check') : String(i + 1).padStart(2, '0')}</span><span class="nav-step-copy"><span class="nav-step-title">${esc(s.short)}</span></span>${locked ? icon('lock', 'nav-lock') : i === current ? '<span class="nav-current-dot"></span>' : ''}</button>`;
+      }
+      html += '</div>';
+    }
+    $('#stepNav').innerHTML = html;
+  }
+  function renderProgress() {
+    renderNav();
+    const done = p.completed.length, percentage = Math.round(done / 12 * 100);
+    $('#sidebarProjectName').textContent = p.name;
+    $('#renameProject').textContent = p.name;
+    $('#sideProgress').textContent = `${done} / 12`;
+    $('#progressFill').style.width = `${percentage}%`;
+    $('#statPercent').innerHTML = `${percentage}<span>%</span>`;
+    $('#statRing').style.setProperty('--progress', percentage);
+    $('#statDone').textContent = `${done} / 12 步已确认`;
+    $('#statCaption').textContent = done === 12 ? '创作档案已就绪，去写你的故事' : done >= 6 ? '前置定位已完成，继续打磨创作设计' : '一个好故事，始于一个好问题';
+    const phases = [['01', '前置定位', '受众 · 人物 · 故事结构', 0, 6], ['02', '创作设计', '分集 · 钩子 · 节奏台词', 6, 10], ['03', '审改交付', '改稿 · 核验 · 创作档案', 10, 12]];
+    $('#stageStrip').innerHTML = phases.map(([n, title, desc, a, b], i) => `<div class="stage-item ${current >= a && current < b ? 'active' : ''} ${done >= b ? 'done' : ''}"><span class="stage-icon">${done >= b ? icon('check') : n}</span><span class="stage-copy"><span class="stage-name">${title}</span><span class="stage-caption">${desc}</span></span><span class="stage-progress">${Math.max(0, Math.min(done - a, b - a))}/${b - a}</span></div>${i < 2 ? '<span class="stage-divider"></span>' : ''}`).join('');
+    $('#exampleBanner').hidden = store.bannerDismissed || p.isDemo || done > 0;
+  }
+  function inputHtml(f, value, { row, column } = {}) {
+    const attrs = row === undefined ? `data-field="${esc(f.id)}" id="field-${esc(f.id)}"` : `data-field="${esc(f.parentId)}" data-row="${row}" data-column="${esc(column)}" aria-label="第${row + 1}行 ${esc(f.label)}"`;
+    const hintId = row === undefined ? ` aria-describedby="hint-${esc(f.id)} error-${esc(f.id)}"` : '';
+    if (f.type === 'textarea') return `<textarea class="text-area" rows="${row === undefined ? 3 : 2}" ${attrs}${hintId} placeholder="${esc(f.placeholder || '写下你的判断…')}" maxlength="20000">${esc(value || '')}</textarea>`;
+    if (f.type === 'select') return `<select class="select-input" ${attrs}${hintId}><option value="">${esc(f.placeholder || '请选择')}</option>${(f.options || []).map(o => `<option value="${esc(o)}" ${value === o ? 'selected' : ''}>${esc(o)}</option>`).join('')}</select>`;
+    return `<input class="text-input" ${attrs}${hintId} type="text" value="${esc(value || '')}" placeholder="${esc(f.placeholder || '填写你的想法')}" maxlength="5000" autocomplete="off">`;
+  }
+  function fieldHtml(f) {
+    const value = p.values[f.id];
+    let control;
+    if (f.type === 'chips') control = `<div class="chips-grid" role="group" aria-label="${esc(f.label)}">${f.options.map(o => `<button type="button" class="choice-chip ${(value || []).includes(o) ? 'selected' : ''}" data-choice="${esc(f.id)}" data-value="${esc(o)}" aria-pressed="${(value || []).includes(o)}"><span class="choice-check">${icon('check')}</span><span class="choice-label">${esc(o)}</span></button>`).join('')}</div>`;
+    else if (f.type === 'repeater') {
+      const rows = Array.isArray(value) && value.length ? value : initialRows(f);
+      control = `<div class="repeater"><div class="repeater-scroll"><table class="repeater-table"><thead><tr><th class="row-index">#</th>${f.columns.map(c => `<th>${esc(c.label)}${c.required === false ? '<span class="optional-mark"> 选填</span>' : ''}</th>`).join('')}<th class="row-control"><span class="sr-only">操作</span></th></tr></thead><tbody>${rows.map((r, i) => `<tr class="repeater-row"><td class="row-index">${String(i + 1).padStart(2, '0')}</td>${f.columns.map(c => `<td>${inputHtml({ ...c, parentId: f.id }, r[c.id], { row: i, column: c.id })}</td>`).join('')}<td class="row-control"><button type="button" class="remove-row" data-remove-row="${esc(f.id)}" data-index="${i}" aria-label="删除第${i + 1}行">${icon('trash')}</button></td></tr>`).join('')}</tbody></table></div><button type="button" class="add-row" data-add-row="${esc(f.id)}">${icon('plus')} 添加一项</button></div>`;
+    } else control = inputHtml(f, value);
+    return `<div class="field ${f.wide || ['repeater', 'chips'].includes(f.type) ? 'wide' : ''}" data-field-wrap="${esc(f.id)}"><label class="field-label" ${['chips', 'repeater'].includes(f.type) ? '' : `for="field-${esc(f.id)}"`}>${esc(f.label)}${f.required ? '<span class="required-mark">*</span>' : '<span class="optional-mark">选填</span>'}${f.minRows > 1 ? `<span class="optional-mark">至少 ${f.minRows} 项</span>` : ''}</label>${f.hint ? `<p class="field-hint" id="hint-${esc(f.id)}">${esc(f.hint)}</p>` : `<span id="hint-${esc(f.id)}"></span>`}${control}<span class="field-error" id="error-${esc(f.id)}"></span></div>`;
+  }
+  function renderStep(focus = false) {
+    const s = STEPS[current];
+    attempted = false;
+    renderProgress();
+    $('#stepTag').textContent = `STEP ${String(current + 1).padStart(2, '0')} / ${current < 6 ? '前置定位' : current < 10 ? '创作设计' : '审改交付'}`;
+    $('#stepTime').innerHTML = `<span class="step-time-dot"></span>${esc(s.time || '按你的节奏填写')}`;
+    $('#stepTitle').textContent = s.title;
+    $('#stepDescription').textContent = s.description;
+    $('#stepForm').innerHTML = `<section class="form-card"><div class="section-heading"><span class="section-number">${String(current + 1).padStart(2, '0')}</span><span><h3>${esc(s.short)}</h3><span class="section-description">把判断写具体，让后面的创作有据可依。</span></span><span class="required-legend">* 必填</span></div><div class="form-grid">${s.fields.map(fieldHtml).join('')}</div></section>`;
+    $('#stepReview').innerHTML = `<div class="review-heading">${icon('check')}<h3>写完之后，再判断一次</h3><span>人工自检</span></div><p class="review-description">勾选表示你已检查内容；系统仅核对填写完整性。</p>${s.checks.map(c => `<label class="check-row ${p.checks[s.id]?.includes(c.id) ? 'checked' : ''}"><input type="checkbox" data-check="${esc(c.id)}" ${p.checks[s.id]?.includes(c.id) ? 'checked' : ''}><span class="check-copy">${esc(c.text)}</span></label>`).join('')}`;
+    $('#prevStep').disabled = current === 0;
+    $('#nextStep').innerHTML = `${current === 11 ? '完成创作准备' : p.completed.includes(s.id) ? '继续下一步' : '确认并继续'} ${icon('arrow')}`;
+    renderContext(); refreshValidation();
+    if (focus) { window.scrollTo({ top: 0, behavior: 'smooth' }); $('#stepTitle').focus({ preventScroll: true }); }
+  }
+  function refreshValidation() {
+    const s = STEPS[current];
+    s.fields.forEach(f => {
+      const wrap = $(`[data-field-wrap="${f.id}"]`);
+      const invalid = attempted && !fieldValid(f);
+      wrap?.classList.toggle('invalid', invalid);
+      $$('input,textarea,select', wrap).forEach(el => el.setAttribute('aria-invalid', invalid));
+      const err = $(`#error-${f.id}`);
+      if (err) err.textContent = invalid ? f.type === 'repeater' ? `请完整填写至少 ${f.minRows || 1} 行，或删除多余的空白行。` : f.type === 'chips' ? '请至少选择一项。' : '请补充这一项，再继续下一步。' : '';
+    });
+    const required = s.fields.filter(f => f.required), count = required.filter(f => fieldValid(f)).length;
+    $('#footerCaption').innerHTML = `<span class="step-status ${count === required.length && checkedCount(s) === s.checks.length ? 'ready' : ''}"></span>${count}/${required.length} 项必填 · ${checkedCount(s)}/${s.checks.length} 项判断`;
+  }
+  function renderContext() {
+    const s = STEPS[current], required = s.fields.filter(f => f.required), count = required.filter(f => fieldValid(f)).length;
+    $('#stepContext').innerHTML = `<section class="context-card"><div class="card-eyebrow">BEFORE YOU CONTINUE</div><h3 class="card-title">本步完成条件<span class="completion-count">${count}/${required.length}</span></h3><div class="completion-list">${required.map(f => `<div class="completion-item ${fieldValid(f) ? 'done' : ''}"><span class="completion-dot">${fieldValid(f) ? icon('check') : ''}</span><span>${esc(f.label)}</span></div>`).join('')}<div class="completion-item ${checkedCount(s) === s.checks.length ? 'done' : ''}"><span class="completion-dot">${checkedCount(s) === s.checks.length ? icon('check') : ''}</span><span>完成人工自检 <small>${checkedCount(s)}/${s.checks.length}</small></span></div></div></section>${(s.tips || []).map((t, i) => `<section class="note-card ${i ? 'secondary-note' : ''}"><span class="quote-icon">${i ? icon('spark') : '“'}</span><h3 class="tip-title">${esc(t.title)}</h3><p class="tip-text">${esc(t.text)}</p></section>`).join('')}<button class="source-card" id="stepSource"><span class="source-meta">${icon('book')}规范对照</span><strong class="source-title">${esc(s.chapters)}</strong><span class="source-description">随时回看原文，保留你的创作判断。</span><span class="source-link">查看本步规范 ${icon('arrow')}</span></button><div class="mini-summary"><span class="summary-label">工作台提示</span><span class="summary-value">修改已确认的前置内容后，后续步骤需要重新复核，填写内容会保留。</span></div>`;
+    $('#stepSource').onclick = () => showSource(s);
+  }
+  function goStep(index) {
+    if (index < 0 || index > 11) return;
+    if (index > p.completed.length) { toast(`先完成第 ${p.completed.length + 1} 步，再继续后面的判断。`); return; }
+    current = index; save(); renderStep(true); closeMobile();
+  }
+  function next() {
+    const s = STEPS[current]; attempted = true; refreshValidation();
+    if (!stepValid(s)) { toast('还有必填内容未完成，已为你标出。'); const invalid = $('.field.invalid'); invalid?.scrollIntoView({ behavior: 'smooth', block: 'center' }); $('input,textarea,select,button', invalid)?.focus({ preventScroll: true }); return; }
+    if (checkedCount(s) < s.checks.length) { toast('请完成下方人工自检，再确认本步。'); $('#stepReview').scrollIntoView({ behavior: 'smooth', block: 'center' }); $('#stepReview input:not(:checked)')?.focus({ preventScroll: true }); return; }
+    if (!p.completed.includes(s.id)) p.completed.push(s.id);
+    save();
+    if (current < 11) { current++; save(); renderStep(true); }
+    else { renderProgress(); renderContext(); showCompletion(); }
+  }
+  function dialog(title, subtitle, body, footer = '', wide = false) {
+    const el = $('#appDialog'); dialogReturnFocus = document.activeElement;
+    if (el.open) el.close();
+    el.className = `modal ${wide ? 'wide' : ''}`;
+    el.innerHTML = `<header class="modal-header"><div><h2 class="modal-title" id="dialogTitle">${title}</h2>${subtitle ? `<p class="modal-subtitle">${subtitle}</p>` : ''}</div><button class="dialog-close" data-close aria-label="关闭">×</button></header><div class="modal-body">${body}</div>${footer ? `<footer class="modal-footer">${footer}</footer>` : ''}`;
+    el.showModal(); document.body.classList.add('dialog-open');
+    $('[data-close]', el).onclick = closeDialog;
+    $$('[data-dismiss]', el).forEach(b => b.onclick = closeDialog);
+  }
+  function closeDialog() { $('#appDialog').close(); document.body.classList.remove('dialog-open'); dialogReturnFocus?.focus?.(); }
+  $('#appDialog').addEventListener('close', () => document.body.classList.remove('dialog-open'));
+  $('#appDialog').addEventListener('click', e => { if (e.target === $('#appDialog')) { const r = e.target.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) closeDialog(); } });
+  function showRename(create = false) {
+    dialog(create ? '给新故事一个名字' : '修改项目名称', '名字可以以后再改，先让故事开始。', `<label class="field-label" for="projectNameInput">项目名称</label><input id="projectNameInput" class="text-input" maxlength="80" placeholder="例如：她的第二次开场" value="${create ? '' : esc(p.name)}">`, '<button class="button ghost" data-dismiss>取消</button><button class="button primary" id="saveProjectName">保存项目</button>');
+    const commit = () => {
+      const name = $('#projectNameInput').value.trim(); if (!name) { toast('请填写一个项目名称。'); $('#projectNameInput').focus(); return; }
+      if (create) { if (store.projects.length >= 30) { toast('最多保留30个项目，请先导出并删除不再使用的项目。'); return; } p = newProject(name); store.projects.unshift(p); store.currentId = p.id; current = 0; }
+      else p.name = name;
+      save(); renderStep(); closeDialog(); toast(create ? '新项目已创建。' : '项目名称已更新。');
+    };
+    $('#saveProjectName').onclick = commit;
+    $('#projectNameInput').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); commit(); } });
+    $('#projectNameInput').focus(); $('#projectNameInput').select();
+  }
+  function showProjects() {
+    dialog('我的创作项目', '项目与填写进度保存在当前浏览器。', `<div class="project-list">${store.projects.map(x => `<div class="project-item ${x.id === p.id ? 'active' : ''}"><button class="project-item-main" data-project="${esc(x.id)}"><span class="project-name">${esc(x.name)}${x.isDemo ? ' <small>示例</small>' : ''}</span><span class="project-meta">${x.completed.length}/12 步已确认 · ${new Date(x.updatedAt).toLocaleDateString('zh-CN')}</span></button><div class="project-item-actions">${x.id === p.id ? '<span class="project-active-label">当前</span>' : ''}<button class="button ghost icon-only" data-delete-project="${esc(x.id)}" aria-label="删除项目 ${esc(x.name)}">${icon('trash')}</button></div></div>`).join('')}</div>`, `<button class="button secondary" id="importProjectButton">${icon('upload')}导入档案</button><button class="button primary" id="createProject">${icon('plus')}新建项目</button>`);
+    $$('#appDialog [data-project]').forEach(b => b.onclick = () => { p = store.projects.find(x => x.id === b.dataset.project); store.currentId = p.id; current = p.activeStep; save(); renderStep(true); closeDialog(); });
+    $$('#appDialog [data-delete-project]').forEach(b => b.onclick = () => {
+      const target = store.projects.find(x => x.id === b.dataset.deleteProject);
+      dialog('删除这个创作项目？', esc(target.name), '<p>删除后将无法从本机恢复。需要保留时，请先导出备份。</p>', '<button class="button secondary" data-dismiss>保留项目</button><button class="button primary" id="confirmDelete">确认删除</button>');
+      $('#confirmDelete').onclick = () => { store.projects = store.projects.filter(x => x.id !== target.id); if (!store.projects.length) store.projects.push(newProject()); if (p.id === target.id) { p = store.projects[0]; store.currentId = p.id; current = p.activeStep; } save(); renderStep(); showProjects(); };
+    });
+    $('#createProject').onclick = () => showRename(true);
+    $('#importProjectButton').onclick = () => $('#importFile').click();
+  }
+  function loadDemo() {
+    const old = store.projects.find(x => x.isDemo);
+    if (old) { p = old; current = p.activeStep; }
+    else { if (store.projects.length >= 30) { toast('项目已达上限，请先导出并删除一个项目。'); return; } p = cleanProject({ ...window.DEMO_PROJECT, isDemo: true, completed: [], activeStep: 0 }); store.projects.unshift(p); current = 0; }
+    store.currentId = p.id; save(); renderStep(true); toast('已打开独立示例项目，你原来的内容已保留。示例仍需逐步自检确认。');
+  }
+  function reportHtml() {
+    return `<h2 class="report-project-title">${esc(p.name)} · 创作档案</h2><div class="report-stats"><div class="report-stat"><strong>${p.completed.length}<small>/12</small></strong><span>步骤已确认</span></div><div class="report-stat"><strong>${STEPS.flatMap(s => s.fields).filter(f => { const v = p.values[f.id]; return Array.isArray(v) ? v.length : present(v); }).length}</strong><span>项创作记录</span></div><div class="report-stat"><strong>${p.completed.length >= 6 ? '已完成' : '进行中'}</strong><span>前置定位</span></div></div>${p.isDemo ? '<p class="report-demo-note">当前为可编辑示例，请替换为自己的项目内容并逐项复核。</p>' : ''}${STEPS.map((s, i) => `<section class="report-section"><h3><span>${String(i + 1).padStart(2, '0')}</span>${esc(s.short)}<small>${p.completed.includes(s.id) ? '已确认' : '待确认'}</small></h3>${s.fields.map(f => { const v = p.values[f.id]; return `<div class="report-field"><strong>${esc(f.label)}</strong><div class="report-value">${valueHtml(f, v)}</div></div>`; }).join('')}<div class="report-field"><strong>人工自检</strong><div class="report-value">${s.checks.map(c => `<div>${p.checks[s.id]?.includes(c.id) ? '☑' : '☐'} ${esc(c.text)}</div>`).join('')}</div></div></section>`).join('')}`;
+  }
+  function valueHtml(f, v) {
+    if (f.type === 'chips') return v?.length ? esc(v.join(' · ')) : '<span class="empty-value">尚未填写</span>';
+    if (f.type === 'repeater') return v?.length ? `<div class="repeater-scroll"><table class="repeater-table"><thead><tr>${f.columns.map(c => `<th>${esc(c.label)}</th>`).join('')}</tr></thead><tbody>${v.map(r => `<tr>${f.columns.map(c => `<td>${esc(r[c.id]) || '—'}</td>`).join('')}</tr>`).join('')}</tbody></table></div>` : '<span class="empty-value">尚未填写</span>';
+    return present(v) ? esc(v).replace(/\n/g, '<br>') : '<span class="empty-value">尚未填写</span>';
+  }
+  function showReport() {
+    dialog(esc(p.name), '创作档案 · 所有判断汇总在这里，便于回看、复核和交付。', reportHtml(), `<button class="button secondary" id="printReport">打印 / 存为 PDF</button><button class="button primary" id="reportExport">${icon('download')}导出 Markdown</button>`, true);
+    $('#printReport').onclick = () => window.print();
+    $('#reportExport').onclick = () => downloadMarkdown();
+  }
+  function markdown() {
+    const lines = [`# ${p.name}`, '', '> 开场 · 创作档案', `> 依据：《爆款短剧剧本创作规范手册》v1.0`, `> 已确认：${p.completed.length}/12步；导出时间：${new Date().toLocaleString('zh-CN')}`, p.isDemo ? '> 当前内容为可编辑示例。' : '', '', '填写完整性与人工自检不等同于剧本质量认证。', ''];
+    const cell = v => String(v ?? '').replace(/\|/g, '\\|').replace(/\n/g, '<br>');
+    for (let i = 0; i < STEPS.length; i++) {
+      const s = STEPS[i]; lines.push(`## ${i + 1}. ${s.short}（${p.completed.includes(s.id) ? '已确认' : '待确认'}）`, '', `对应规范：${s.chapters}`, '');
+      for (const f of s.fields) {
+        const v = p.values[f.id]; lines.push(`### ${f.label}`, '');
+        if (f.type === 'chips') lines.push(v?.join('、') || '（尚未填写）');
+        else if (f.type === 'repeater' && v?.length) { lines.push(`| ${f.columns.map(c => cell(c.label)).join(' | ')} |`, `| ${f.columns.map(() => '---').join(' | ')} |`, ...v.map(r => `| ${f.columns.map(c => cell(r[c.id])).join(' | ')} |`)); }
+        else lines.push(typeof v === 'string' && v.trim() ? v : '（尚未填写）');
+        lines.push('');
+      }
+      lines.push('### 人工自检', '', ...s.checks.map(c => `- [${p.checks[s.id]?.includes(c.id) ? 'x' : ' '}] ${c.text}`), '');
+    }
+    return lines.join('\n');
+  }
+  function filename() { return p.name.replace(/[<>:"/\\|?*\u0000-\u001f]/g, '_').slice(0, 80) || '创作档案'; }
+  function download(content, name, mime) { const blob = new Blob([content], { type: mime }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(url), 5000); }
+  function downloadMarkdown() { download('\uFEFF' + markdown(), `${filename()}-创作档案.md`, 'text/markdown;charset=utf-8'); toast('创作档案已导出。'); }
+  function showExport() {
+    dialog('把故事带走', '建议定期保存一份备份，或导出档案用于后续写作。', `<div class="export-options"><button class="export-option" id="exportMd">${icon('file')}<span><strong>创作档案 · Markdown</strong><small>按十二步汇总所有内容，便于阅读与交付</small></span>${icon('arrow')}</button><button class="export-option" id="exportJson">${icon('download')}<span><strong>项目备份 · JSON</strong><small>保存内容与确认进度，可在其他设备导入继续</small></span>${icon('arrow')}</button><button class="export-option" id="importJson">${icon('upload')}<span><strong>导入项目备份</strong><small>新建独立项目，保留当前项目内容</small></span>${icon('arrow')}</button></div>`);
+    $('#exportMd').onclick = downloadMarkdown;
+    $('#exportJson').onclick = () => { download(JSON.stringify({ format: 'kaichang-project', version: 1, project: p }, null, 2), `${filename()}-开场备份.json`, 'application/json;charset=utf-8'); toast('项目备份已导出。'); };
+    $('#importJson').onclick = () => $('#importFile').click();
+  }
+  $('#importFile').addEventListener('change', async e => {
+    const file = e.target.files[0]; e.target.value = ''; if (!file) return;
+    try {
+      if (file.size > 2 * 1024 * 1024) throw new Error('文件超过2MB，请选择开场导出的项目备份');
+      if (store.projects.length >= 30) throw new Error('最多保留30个项目，请先导出并删除旧项目');
+      const raw = JSON.parse(await file.text()); if (raw.format !== 'kaichang-project' || raw.version !== 1) throw new Error('请选择由开场导出的 JSON 项目备份');
+      p = cleanProject(raw.project); store.projects.unshift(p); store.currentId = p.id; current = p.activeStep; save(); renderStep(true); closeDialog(); toast('项目已导入，原有项目内容已保留。');
+    } catch (error) { toast(`导入失败：${error.message}`); }
+  });
+  function showCompletion() {
+    dialog('故事的准备，已经完成。', esc(p.name), `<div class="completion-screen"><span class="completion-mark">${icon('check')}</span><p>十二步判断已逐项确认。把这份档案作为剧本写作的依据，后续修改时也可以随时回来复核。</p><div class="completion-actions"><button class="button primary" id="completionReport">查看完整创作档案 ${icon('arrow')}</button><button class="button secondary" id="completionDownload">导出项目备份</button></div></div>`);
+    $('#completionReport').onclick = showReport;
+    $('#completionDownload').onclick = () => { download(JSON.stringify({ format: 'kaichang-project', version: 1, project: p }, null, 2), `${filename()}-开场备份.json`, 'application/json;charset=utf-8'); };
+  }
+  async function showSource(step = null) {
+    dialog('创作规范手册', step ? `${esc(step.chapters)} · ${esc(step.short)}` : '原始文件完整保留；可搜索章节、关键词和具体规则。', '<p class="source-loading">正在读取规范…</p>', '', true);
+    try {
+      if (!sourceText) { const response = await fetch('source.md'); if (!response.ok) throw new Error('读取失败'); sourceText = await response.text(); }
+      const re = /^## (\d+)\. .+$/gm, starts = [...sourceText.matchAll(re)];
+      const sections = starts.map((m, i) => ({ n: Number(m[1]), title: m[0].slice(3), text: sourceText.slice(m.index, starts[i + 1]?.index || sourceText.length).replace(/\n# (?:第[^\n]+|附录[^\n]+)[\s\S]*$/, '') }));
+      let preferred = [];
+      if (step) { const nums = (step.chapters.match(/\d+/g) || []).map(Number); if (nums.length === 2 && /[—–-]/.test(step.chapters)) preferred = Array.from({ length: nums[1] - nums[0] + 1 }, (_, i) => nums[0] + i); else preferred = nums; }
+      $('#appDialog .modal-body').innerHTML = `<input type="search" class="search-input text-input" id="sourceSearch" placeholder="搜索规范：人物、伏笔、反转…" aria-label="搜索创作规范"><div class="source-content" id="sourceContent">${sections.map(s => `<details class="source-section" data-source-section="${s.n}" ${preferred.includes(s.n) ? 'open' : ''}><summary>${esc(s.title)}</summary><div class="source-markdown">${renderMarkdown(s.text.replace(/^## .+\n/, ''))}</div></details>`).join('')}<details class="source-section"><summary>附录 · 标准创作流程与决策总图</summary><div class="source-markdown">${renderMarkdown(sourceText.slice(sourceText.indexOf('# 附录')))}</div></details></div><p class="source-footnote">按原文件展示。星级、秒数、字数等参数不作为工作台的自动质量判定。</p>`;
+      $('#sourceSearch').addEventListener('input', e => { const q = e.target.value.trim().toLowerCase(); $$('.source-section', $('#sourceContent')).forEach(d => { d.hidden = !!q && !d.textContent.toLowerCase().includes(q); if (q && !d.hidden) d.open = true; }); });
+      if (preferred.length) { const first = $(`[data-source-section="${preferred[0]}"]`); first?.scrollIntoView({ block: 'start' }); }
+    } catch { $('#appDialog .modal-body').innerHTML = '<p>规范暂时无法加载，请刷新后重试。已填写内容不受影响。</p>'; }
+  }
+  function renderMarkdown(text) {
+    const lines = text.split('\n'), out = []; let code = false, table = false, list = false;
+    const inline = v => esc(v).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/`([^`]+)`/g, '<code>$1</code>');
+    for (const line of lines) {
+      if (line.startsWith('```')) { if (table) { out.push('</tbody></table></div>'); table = false; } if (list) { out.push('</ul>'); list = false; } out.push(code ? '</code></pre>' : '<pre><code>'); code = !code; continue; }
+      if (code) { out.push(esc(line) + '\n'); continue; }
+      if (line.trim().startsWith('|')) { if (/^\|[\s:|\-]+\|$/.test(line.trim())) continue; if (!table) { out.push('<div class="repeater-scroll"><table><tbody>'); table = true; } out.push(`<tr>${line.trim().replace(/^\||\|$/g, '').split('|').map(c => `<td>${inline(c.trim())}</td>`).join('')}</tr>`); continue; }
+      if (table) { out.push('</tbody></table></div>'); table = false; }
+      if (/^[-*] /.test(line)) { if (!list) { out.push('<ul>'); list = true; } out.push(`<li>${inline(line.slice(2))}</li>`); continue; }
+      if (list) { out.push('</ul>'); list = false; }
+      const heading = line.match(/^(#{1,6})\s+(.+)$/); if (heading) { out.push(`<h4>${inline(heading[2])}</h4>`); continue; }
+      if (/^---+$/.test(line.trim())) { out.push('<hr>'); continue; }
+      if (line.startsWith('>')) { out.push(`<blockquote>${inline(line.replace(/^>\s?/, ''))}</blockquote>`); continue; }
+      if (line.trim()) out.push(`<p>${inline(line)}</p>`);
+    }
+    if (code) out.push('</code></pre>'); if (table) out.push('</tbody></table></div>'); if (list) out.push('</ul>');
+    return out.join('');
+  }
+  function closeMobile() { $('#sidebar').classList.remove('open'); $('#mobileBackdrop').classList.remove('show'); $('#mobileBackdrop').hidden = true; $('#mobileMenu').setAttribute('aria-expanded', 'false'); }
+  $('#stepNav').addEventListener('click', e => { const b = e.target.closest('[data-step]'); if (b) goStep(Number(b.dataset.step)); });
+  $('#stepForm').addEventListener('submit', e => e.preventDefault());
+  $('#stepForm').addEventListener('input', e => {
+    const el = e.target; const f = fieldsById[el.dataset.field]; if (!f) return;
+    if (el.dataset.row !== undefined) { if (!Array.isArray(p.values[f.id]) || !p.values[f.id].length) p.values[f.id] = initialRows(f); p.values[f.id][Number(el.dataset.row)][el.dataset.column] = el.value; }
+    else p.values[f.id] = el.value;
+    changed();
+  });
+  $('#stepForm').addEventListener('click', e => {
+    const chip = e.target.closest('[data-choice]');
+    if (chip) {
+      const f = fieldsById[chip.dataset.choice]; const vals = p.values[f.id] || [];
+      if (vals.includes(chip.dataset.value)) p.values[f.id] = vals.filter(v => v !== chip.dataset.value);
+      else { if (f.maxSelected && vals.length >= f.maxSelected) { toast(`最多选择${f.maxSelected}项，优先明确核心承诺。`); return; } p.values[f.id] = [...vals, chip.dataset.value]; }
+      changed(); $$('#stepForm [data-choice]').filter(b => b.dataset.choice === f.id).forEach(b => { const selected = p.values[f.id].includes(b.dataset.value); b.classList.toggle('selected', selected); b.setAttribute('aria-pressed', selected); });
+    }
+    const add = e.target.closest('[data-add-row]'), remove = e.target.closest('[data-remove-row]');
+    if (add || remove) {
+      const f = fieldsById[(add || remove).dataset[add ? 'addRow' : 'removeRow']];
+      if (!Array.isArray(p.values[f.id]) || !p.values[f.id].length) p.values[f.id] = initialRows(f);
+      if (add) { if (p.values[f.id].length >= 100) { toast('每张表最多100行。'); return; } p.values[f.id].push(Object.fromEntries(f.columns.map(c => [c.id, '']))); }
+      else p.values[f.id].splice(Number(remove.dataset.index), 1);
+      changed(); renderStep();
+      if (add) $(`[data-field-wrap="${f.id}"] tr:last-child input, [data-field-wrap="${f.id}"] tr:last-child textarea`)?.focus();
+    }
+  });
+  $('#stepReview').addEventListener('change', e => {
+    const id = e.target.dataset.check; if (!id) return; const s = STEPS[current];
+    if (p.completed.includes(s.id)) { const existing = [...(p.checks[s.id] || [])]; invalidateFrom(current); p.checks[s.id] = existing; }
+    const values = p.checks[s.id] || []; p.checks[s.id] = e.target.checked ? [...new Set([...values, id])] : values.filter(x => x !== id);
+    e.target.closest('.check-row').classList.toggle('checked', e.target.checked); save(); renderProgress(); renderContext(); refreshValidation();
+  });
+  $('#nextStep').onclick = next; $('#prevStep').onclick = () => goStep(current - 1);
+  $('#projectMenu').onclick = showProjects; $('#renameProject').onclick = () => showRename();
+  $('#viewReport').innerHTML = `${icon('file')}<span>创作档案</span>`; $('#viewReport').onclick = showReport;
+  $('#exportProject').innerHTML = `${icon('download')}<span>导出项目</span>`; $('#exportProject').onclick = showExport;
+  $('#guideIcon').innerHTML = icon('book'); $('#openGuide').onclick = () => showSource();
+  $('#loadDemo').onclick = loadDemo;
+  $('#dismissBanner').onclick = () => { store.bannerDismissed = true; save(); $('#exampleBanner').hidden = true; };
+  $('.brand').onclick = e => { e.preventDefault(); goStep(0); };
+  $('#mobileMenu').onclick = () => { const open = $('#sidebar').classList.toggle('open'); $('#mobileBackdrop').hidden = !open; $('#mobileBackdrop').classList.toggle('show', open); $('#mobileMenu').setAttribute('aria-expanded', open); };
+  $('#mobileBackdrop').onclick = closeMobile;
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMobile(); });
+  renderStep(); save();
+  // Small read-only surface for automated verification; no content is transmitted.
+  window.Kaichang = { getSteps: () => clone(STEPS), getProject: () => clone(p), getMarkdown: markdown };
+})();
+
+});
+</script>
+</head>
+<body>
+  <div class="app-shell">
+    <div class="mobile-backdrop" id="mobileBackdrop" hidden></div>
+    <aside class="sidebar" id="sidebar" aria-label="创作流程导航">
+      <a class="brand" href="#" aria-label="开场工作台首页">
+        <span class="brand-mark"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M7 8h9M7 8v24h9M33 8h-9M33 8v24h-9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M17 14l10 6-10 6z" fill="currentColor"/></svg></span>
+        <span><span class="brand-name">开场<span class="brand-dot">.</span></span><span class="brand-sub">STORY STARTS HERE</span></span>
+      </a>
+      <div class="workspace-label">我的创作空间</div>
+      <button class="project-switch" id="projectMenu"><span class="project-switch-label"><span class="project-symbol">▧</span><span id="sidebarProjectName">未命名剧本</span></span><span aria-hidden="true">⌄</span></button>
+      <div class="sidebar-progress"><div class="progress-label"><span>创作准备度</span><span id="sideProgress">0 / 12</span></div><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div></div>
+      <nav class="workflow" id="stepNav" aria-label="十二步创作流程"></nav>
+      <div class="sidebar-bottom">
+        <button class="guide-button" id="openGuide"><span id="guideIcon"></span>创作规范手册<span class="external-icon">↗</span></button>
+        <div class="profile"><span class="profile-avatar">创</span><span class="profile-info"><strong>专注，把故事写好</strong><small>你的私人编剧工作台</small></span><span class="status-dot"></span></div>
+      </div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div class="breadcrumb"><button class="mobile-menu button icon-only ghost" id="mobileMenu" aria-label="展开流程导航">☰</button><span>创作工作台</span><span class="breadcrumb-divider">/</span><button class="project-crumb" id="renameProject">未命名剧本</button></div>
+        <div class="topbar-actions"><span class="save-state" id="saveState"><span class="status-dot"></span>已保存至本机</span><button class="button secondary small" id="viewReport"></button><button class="button primary small" id="exportProject"></button></div>
+      </header>
+      <div class="workspace">
+        <section class="intro" aria-labelledby="pageTitle">
+          <div class="eyebrow"><span class="eyebrow-line"></span>THE WRITER’S DESK <span class="edition">/ 创作准备篇</span></div>
+          <div class="intro-line"><div class="intro-copy"><h1 id="pageTitle">让故事，在动笔前成立。</h1><p>从观众到最后一个伏笔，把创作前的每一个判断写清楚。</p></div><div class="project-stat"><div class="stat-ring" id="statRing"><span id="statPercent">0<span>%</span></span></div><div class="stat-copy"><strong id="statDone">0 / 12 步已确认</strong><span id="statCaption">一个好故事，始于一个好问题</span></div></div></div>
+        </section>
+        <div class="stage-strip" id="stageStrip" aria-label="三个创作阶段"></div>
+        <div class="banner" id="exampleBanner"><span><strong>第一次使用？</strong>用一个完整示例，看看如何把想法变成创作档案。</span><button class="button ghost small" id="loadDemo">体验示例 <span aria-hidden="true">↗</span></button><button class="button ghost icon-only" id="dismissBanner" aria-label="关闭示例提示">×</button></div>
+        <div class="editor-layout">
+          <div class="editor-column">
+            <section class="step-heading"><div class="step-meta"><span class="step-tag" id="stepTag"></span><span id="stepTime"></span></div><h2 class="step-title" id="stepTitle" tabindex="-1"></h2><p class="step-description" id="stepDescription"></p></section>
+            <form id="stepForm" novalidate></form>
+            <section class="step-review" id="stepReview" aria-label="本步人工判断"></section>
+            <div class="step-footer"><span class="footer-caption" id="footerCaption"></span><div class="footer-actions"><button class="button ghost" id="prevStep">上一步</button><button class="button primary" id="nextStep"></button></div></div>
+          </div>
+          <aside class="context-column" aria-label="当前步骤提示"><div id="stepContext"></div></aside>
+        </div>
+        <footer class="workspace-footer"><span><span class="footer-dot"></span>内容自动保存在当前浏览器，导出备份可跨设备继续。</span><span>依据《爆款短剧剧本创作规范手册》v1.0</span></footer>
+      </div>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <dialog class="modal" id="appDialog" aria-labelledby="dialogTitle"></dialog>
+  <input type="file" id="importFile" accept="application/json,.json" hidden>
+  <noscript>请开启浏览器 JavaScript，以使用逐步填写、保存和导出功能。</noscript>
+</body>
+</html>
